@@ -1,46 +1,76 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PharmaShop.Infastructure.Data;
-using Microsoft.Extensions.Configuration;
-using System.Configuration;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using PharmaShop.Infastructure.Models;
+using PharmaShop.Api.Models;
 namespace PharmaShop.Infastructure
 {
     public static class Configuration
     {
-        public static void RegisterDb(this IServiceCollection services, IConfiguration configuration)
+        public static void AutoMigration(this WebApplication webApplication)
         {
-            var connectionString = configuration.GetConnectionString("PharmaStoreDatabase")
-                    ?? throw new InvalidOperationException("Connection not found.");
-
-            services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(connectionString));
-
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
-
-            services.AddAuthentication(options =>
+            using (var scope = webApplication.Services.CreateScope())
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.SaveToken = true;
-                options.RequireHttpsMetadata = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
+                var appContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                try
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = configuration["JWT:ValidAudience"],
-                    ValidIssuer = configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
-                };
-            });
+                    appContext.Database.MigrateAsync().Wait();
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+        public static async Task SeedData(this WebApplication webApplication, IConfiguration configuration)
+        {
+            using (var scope = webApplication.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                // Lấy section từ appsettings.json ép thành kiểu DefaultUser nếu rỗng thì tạo mới DefaultUser
+                var defaultUser = configuration.GetSection("DefaultUsers")?.Get<DefaultUser>() ?? new DefaultUser();
+                var defaultRole = configuration.GetValue<String>("DefaultRole") ?? "SuperAdmin";
+
+                try
+                {
+                    // add role
+                    if (!await roleManager.RoleExistsAsync(defaultRole))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(defaultRole));
+                    }
+
+                    var existUser = await userManager.FindByNameAsync(defaultUser.UserName);
+
+                    if (existUser == null)
+                    {
+                        // add user
+                        var user = new ApplicationUser
+                        {
+                            UserName = defaultUser.UserName,
+                            IsActive = true,
+                            AccessFailedCount = 0
+                        };
+
+                        var identityUser = await userManager.CreateAsync(user, defaultUser.Password);
+
+                        if (identityUser.Succeeded)
+                        {
+                            await userManager.AddToRoleAsync(user, defaultRole);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
         }
     }
 }

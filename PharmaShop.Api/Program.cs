@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using PharmaShop.Infastructure;
-using PharmaShop.Infastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +13,14 @@ builder.Services.AddAuthorization();
 
 builder.Services.RegisterDb(builder.Configuration);
 
+builder.Services.AddDependencyInjection();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.AutoMigration();
+
+app.SeedData(builder.Configuration).GetAwaiter().GetResult();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -29,6 +32,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllers();
+
 
 app.Run();
