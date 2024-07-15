@@ -11,8 +11,8 @@ using PharmaShop.Infastructure.Data;
 namespace PharmaShop.Infastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240711075826_initialDb")]
-    partial class initialDb
+    [Migration("20240713093320_initDb")]
+    partial class initDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -469,10 +469,6 @@ namespace PharmaShop.Infastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.Property<double>("Discount")
                         .HasColumnType("double");
 
@@ -492,9 +488,18 @@ namespace PharmaShop.Infastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
-
                     b.ToTable("UserTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Discount = 0.0,
+                            IsActive = true,
+                            MaxDiscount = 0.0,
+                            Name = "Bronze",
+                            Point = 0
+                        });
                 });
 
             modelBuilder.Entity("PharmaShop.Infastructure.Models.ApplicationUser", b =>
@@ -553,11 +558,17 @@ namespace PharmaShop.Infastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int>("Point")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -571,6 +582,8 @@ namespace PharmaShop.Infastructure.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("ApplicationUser", (string)null);
                 });
@@ -750,15 +763,15 @@ namespace PharmaShop.Infastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PharmaShop.Infastructure.Entities.UserType", b =>
+            modelBuilder.Entity("PharmaShop.Infastructure.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("PharmaShop.Infastructure.Models.ApplicationUser", "Customer")
+                    b.HasOne("PharmaShop.Infastructure.Entities.UserType", "Type")
                         .WithMany()
-                        .HasForeignKey("CustomerId")
+                        .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Customer");
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("PharmaShop.Infastructure.Entities.Category", b =>

@@ -7,7 +7,10 @@ using System.Text;
 using PharmaShop.Infastructure.Models;
 using PharmaShop.Api.Abtract;
 using PharmaShop.Api.Services;
-namespace PharmaShop.Infastructure
+using Microsoft.OpenApi.Models;
+using PharmaShop.Application.Abtract;
+using PharmaShop.Application.Repositorys;
+namespace PharmaShop.Api.Setting
 {
     public static class Configuration
     {
@@ -50,11 +53,54 @@ namespace PharmaShop.Infastructure
                 };
             });
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true; // Bảo vệ chống tấn công XSS
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Chỉ gửi cookie qua HTTPS
+                options.Cookie.SameSite = SameSiteMode.Strict; // Chỉ gửi cookie trong cùng một site
+            });
+
             services.AddAuthorization();
         }
         public static void AddDependencyInjection(this IServiceCollection services)
         {
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IUserService, UserService>();
+        }
+
+        public static void AddSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+
+                
+            });
         }
     }
 }

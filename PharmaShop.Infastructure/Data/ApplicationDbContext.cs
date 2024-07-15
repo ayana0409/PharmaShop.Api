@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PharmaShop.Infastructure.Entities;
 using PharmaShop.Infastructure.Models;
+using System.Configuration;
+using System.Drawing;
+using System.Reflection.Emit;
 
 namespace PharmaShop.Infastructure.Data
 {
@@ -31,6 +34,17 @@ namespace PharmaShop.Infastructure.Data
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<UserType>().HasData(
+                new UserType
+                {
+                    Id = 1,
+                    Name = "Bronze",
+                    Discount = 0,
+                    MaxDiscount = 0,
+                    Point = 0,
+                    IsActive = true
+                }
+            );
             //AspNetUser
             builder.Entity<ApplicationUser>().ToTable("ApplicationUser");
             builder.Entity<IdentityRole>().ToTable("ApplicationRole");
@@ -50,6 +64,7 @@ namespace PharmaShop.Infastructure.Data
                 o.ProductId,
                 o.OrderId
             });
+
         }
     }
 }
