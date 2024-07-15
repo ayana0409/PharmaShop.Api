@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace PharmaShop.Infastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initialDb : Migration
+    public partial class initDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,36 +27,6 @@ namespace PharmaShop.Infastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ApplicationRole", x => x.Id);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "ApplicationUser",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
-                    FullName = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
-                    Address = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true),
-                    MobilePhone = table.Column<string>(type: "longtext", nullable: true),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    PasswordHash = table.Column<string>(type: "longtext", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "longtext", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetime", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
@@ -81,6 +51,24 @@ namespace PharmaShop.Infastructure.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "UserTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
+                    Discount = table.Column<double>(type: "double", nullable: false),
+                    MaxDiscount = table.Column<double>(type: "double", nullable: false),
+                    Point = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTypes", x => x.Id);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "RoleClaim",
                 columns: table => new
                 {
@@ -97,6 +85,147 @@ namespace PharmaShop.Infastructure.Migrations
                         name: "FK_RoleClaim_ApplicationRole_RoleId",
                         column: x => x.RoleId,
                         principalTable: "ApplicationRole",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
+                    Description = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: true),
+                    Taxing = table.Column<double>(type: "double", nullable: false),
+                    Unit = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
+                    Packaging = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
+                    Brand = table.Column<string>(type: "longtext", nullable: false),
+                    BigUnit = table.Column<int>(type: "int", nullable: false),
+                    MediumUnit = table.Column<int>(type: "int", nullable: false),
+                    SmallUnit = table.Column<int>(type: "int", nullable: false),
+                    BigUnitPrice = table.Column<double>(type: "double", nullable: false),
+                    MediumUnitPrice = table.Column<double>(type: "double", nullable: false),
+                    SmallUnitPrice = table.Column<double>(type: "double", nullable: false),
+                    RequirePrescription = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUser",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    FullName = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
+                    Address = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true),
+                    MobilePhone = table.Column<string>(type: "longtext", nullable: true),
+                    Point = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    TypeId = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "longtext", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "longtext", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "longtext", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetime", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUser_UserTypes_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "UserTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Path = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Images_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ProductDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
+                    Content = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductDetails_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "ProductInventorys",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    BatchNumber = table.Column<string>(type: "longtext", nullable: false),
+                    ManufactureDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Expiry = table.Column<int>(type: "int", nullable: false),
+                    BigUnitQuantity = table.Column<int>(type: "int", nullable: false),
+                    MediumUnitQuantity = table.Column<int>(type: "int", nullable: false),
+                    SmallUnitQuantity = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductInventorys", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductInventorys_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -263,86 +392,6 @@ namespace PharmaShop.Infastructure.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "UserTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
-                    Discount = table.Column<double>(type: "double", nullable: false),
-                    MaxDiscount = table.Column<double>(type: "double", nullable: false),
-                    Point = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CustomerId = table.Column<string>(type: "varchar(255)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserTypes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserTypes_ApplicationUser_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "ApplicationUser",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
-                    Description = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: true),
-                    Taxing = table.Column<double>(type: "double", nullable: false),
-                    Unit = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: false),
-                    Packaging = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
-                    Brand = table.Column<string>(type: "longtext", nullable: false),
-                    BigUnit = table.Column<int>(type: "int", nullable: false),
-                    MediumUnit = table.Column<int>(type: "int", nullable: false),
-                    SmallUnit = table.Column<int>(type: "int", nullable: false),
-                    BigUnitPrice = table.Column<double>(type: "double", nullable: false),
-                    MediumUnitPrice = table.Column<double>(type: "double", nullable: false),
-                    SmallUnitPrice = table.Column<double>(type: "double", nullable: false),
-                    RequirePrescription = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Path = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Images_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "ImportDetails",
                 columns: table => new
                 {
@@ -400,53 +449,10 @@ namespace PharmaShop.Infastructure.Migrations
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "ProductDetails",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
-                    Content = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductDetails", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductDetails_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "ProductInventorys",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    BatchNumber = table.Column<string>(type: "longtext", nullable: false),
-                    ManufactureDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Expiry = table.Column<int>(type: "int", nullable: false),
-                    BigUnitQuantity = table.Column<int>(type: "int", nullable: false),
-                    MediumUnitQuantity = table.Column<int>(type: "int", nullable: false),
-                    SmallUnitQuantity = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductInventorys", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductInventorys_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+            migrationBuilder.InsertData(
+                table: "UserTypes",
+                columns: new[] { "Id", "Discount", "IsActive", "MaxDiscount", "Name", "Point" },
+                values: new object[] { 1, 0.0, true, 0.0, "Bronze", 0 });
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -458,6 +464,11 @@ namespace PharmaShop.Infastructure.Migrations
                 name: "EmailIndex",
                 table: "ApplicationUser",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUser_TypeId",
+                table: "ApplicationUser",
+                column: "TypeId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -534,11 +545,6 @@ namespace PharmaShop.Infastructure.Migrations
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserTypes_CustomerId",
-                table: "UserTypes",
-                column: "CustomerId");
         }
 
         /// <inheritdoc />
@@ -578,9 +584,6 @@ namespace PharmaShop.Infastructure.Migrations
                 name: "UserToken");
 
             migrationBuilder.DropTable(
-                name: "UserTypes");
-
-            migrationBuilder.DropTable(
                 name: "Imports");
 
             migrationBuilder.DropTable(
@@ -597,6 +600,9 @@ namespace PharmaShop.Infastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "UserTypes");
         }
     }
 }

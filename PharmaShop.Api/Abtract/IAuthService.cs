@@ -1,7 +1,10 @@
-﻿namespace PharmaShop.Api.Abtract
+﻿using PharmaShop.Api.Models.Request;
+using PharmaShop.Api.Models.Response;
+
+namespace PharmaShop.Api.Abtract
 {
     public interface IAuthService
     {
-        Task<string> AuthenticateAsync(string username, string password);
+        Task<AuthResponseModel> AuthenticateAsync(LoginRequestModel user);
     }
 }

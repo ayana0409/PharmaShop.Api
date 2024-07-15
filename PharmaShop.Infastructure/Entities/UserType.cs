@@ -13,9 +13,5 @@ namespace PharmaShop.Infastructure.Entities
         public double MaxDiscount { get; set; }
         public int Point { get; set; }
         public bool IsActive { get; set; }
-        [Required]
-        public string? CustomerId { get; set; }
-        [ForeignKey(nameof(CustomerId))]
-        public ApplicationUser? Customer { get; set; }
     }
 }

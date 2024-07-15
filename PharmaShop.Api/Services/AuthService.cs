@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using PharmaShop.Api.Abtract;
+using PharmaShop.Api.Models.Request;
+using PharmaShop.Api.Models.Response;
+using PharmaShop.Infastructure.Enum;
 using PharmaShop.Infastructure.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -24,40 +27,53 @@ namespace PharmaShop.Api.Services
             _configuration = configuration;
         }
 
-        public async Task<string> AuthenticateAsync(string username, string password)
+        public async Task<AuthResponseModel> AuthenticateAsync(LoginRequestModel user)
         {
-            var user = await _userManager.FindByNameAsync(username);
-            if (user == null)
+            if (string.IsNullOrEmpty(user.Username) || string.IsNullOrEmpty(user.Password))
             {
-                throw new ApplicationException("Invalid username or password.");
+                throw new ApplicationException(message: "Username or password must be not empty.");
             }
 
-            var result = await _signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: false);
+            var loginUser = await _userManager.FindByNameAsync(user.Username);
+            if (loginUser == null)
+            {
+                throw new ApplicationException(message: "Invalid username or password.");
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(loginUser, user.Password, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
-                throw new ApplicationException("Invalid username or password.");
+                throw new ApplicationException(message: "Invalid username or password.");
             }
 
-            var token = GenerateJwtToken(user);
-            return token;
+            return new AuthResponseModel
+            {
+                Token = await GenerateJwtToken(loginUser)
+            };
         }
 
-        private string GenerateJwtToken(ApplicationUser user)
+        private async Task<string> GenerateJwtToken(ApplicationUser user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.NameIdentifier, user.Id)
-            // Thêm các claims khác tùy ý
-        };
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
+            };
+
+            var roles = await _userManager.GetRolesAsync(user);
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var token = new JwtSecurityToken(
                 _configuration["Jwt:ValidIssuer"],
                 _configuration["Jwt:ValidAudience"],
+                
                 claims,
                 expires: DateTime.UtcNow.AddDays(7),
                 signingCredentials: credentials

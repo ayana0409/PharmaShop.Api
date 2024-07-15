@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PharmaShop.Infastructure.Data;
 using PharmaShop.Infastructure.Models;
 using PharmaShop.Api.Models;
+using PharmaShop.Infastructure.Entities;
 namespace PharmaShop.Infastructure
 {
     public static class Configuration
@@ -55,7 +56,8 @@ namespace PharmaShop.Infastructure
                         {
                             UserName = defaultUser.UserName,
                             IsActive = true,
-                            AccessFailedCount = 0
+                            AccessFailedCount = 0,
+                            TypeId = 1
                         };
 
                         var identityUser = await userManager.CreateAsync(user, defaultUser.Password);

@@ -16,16 +16,15 @@ namespace PharmaShop.Api.Controllers
             _authService = authService;
         }
         [HttpPost("login")]
-        public async Task<ActionResult<AuthResponseModel>> Login(LoginRequestModel model)
+        public async Task<ActionResult<AuthResponseModel>> Login(LoginRequestModel loginUser)
         {
             try
             {
-                var token = await _authService.AuthenticateAsync(model.Username, model.Password);
-                return new AuthResponseModel { Token = token };
+                return await _authService.AuthenticateAsync(loginUser);
             }
             catch (ApplicationException ex)
             {
-                return Unauthorized(new { message = ex.Message });
+                return Unauthorized(ex.Message);
             }
         }
     }
