@@ -1,6 +1,6 @@
 ﻿using PharmaShop.Infastructure.Models;
 
-namespace PharmaShop.Api.Services
+namespace PharmaShop.Application.Services
 {
     public interface IUserService
     {

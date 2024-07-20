@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using PharmaShop.Api.Abtract;
-using PharmaShop.Api.Models.Request;
-using PharmaShop.Api.Models.Response;
+using PharmaShop.Application.Abtract;
+using PharmaShop.Application.Models.Request;
+using PharmaShop.Application.Models.Response;
 using PharmaShop.Infastructure.Enum;
 using PharmaShop.Infastructure.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace PharmaShop.Api.Services
+namespace PharmaShop.Application.Services
 {
     public class AuthService : IAuthService
     {

@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PharmaShop.Api.Models.Request;
-using PharmaShop.Api.Models.Response;
+using Microsoft.IdentityModel.Tokens;
+using PharmaShop.Application.Models.Request;
+using PharmaShop.Application.Models.Response;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Infastructure.Entities;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace PharmaShop.Api.Controllers
+namespace PharmaShop.Application.Controllers
 {
     [Authorize]
     [ApiController]
@@ -21,17 +23,11 @@ namespace PharmaShop.Api.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        // GET: api/<CategoryController>
-        [HttpGet("all")]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
         [HttpGet("categorytable")]
         public List<CategoryTableResponseModel> GetForTable()
         {
-            var data = _unitOfWork.Table<Category>().ToList();
+            var data = _unitOfWork.Table<Category>().Where(c => c.IsAcvive == true).ToList();
 
             List<CategoryTableResponseModel> result = [];
 
@@ -47,13 +43,6 @@ namespace PharmaShop.Api.Controllers
             }
 
             return result;
-        }
-
-        // GET api/<CategoryController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
         }
 
         // POST api/<CategoryController>
@@ -84,7 +73,7 @@ namespace PharmaShop.Api.Controllers
 
         // PUT api/<CategoryController>/5
         [HttpPut("update")]
-        public ActionResult UpdateCategory([FromBody] CategoryRequestModel value)
+        public ActionResult Update([FromBody] CategoryRequestModel value)
         {
             try
             {
@@ -113,10 +102,27 @@ namespace PharmaShop.Api.Controllers
             }
         }
 
-        // DELETE api/<CategoryController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("delete/{id}")]
+        public ActionResult Delete(int id)
         {
+            try
+            {
+                Category? category = _unitOfWork.Table<Category>().FirstOrDefault(c => c.Id == id);
+
+                if (category == null)
+                {
+                    throw new Exception(message: "Invalid category");
+                }
+                category.IsAcvive = false;
+
+                _unitOfWork.SaveChangeAsync();
+                
+                return Ok(new { Message = "Delete successfuly" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

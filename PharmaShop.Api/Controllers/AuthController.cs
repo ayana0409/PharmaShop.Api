@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PharmaShop.Api.Abtract;
-using PharmaShop.Api.Models.Request;
-using PharmaShop.Api.Models.Response;
+using PharmaShop.Application.Abtract;
+using PharmaShop.Application.Models.Request;
+using PharmaShop.Application.Models.Response;
 
-namespace PharmaShop.Api.Controllers
+namespace PharmaShop.Application.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

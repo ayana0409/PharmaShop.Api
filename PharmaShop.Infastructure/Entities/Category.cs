@@ -12,6 +12,8 @@ namespace PharmaShop.Infastructure.Entities
         [ForeignKey(nameof(ParentId))]
         public Category? ParentCategory { get; set; }
         public ICollection<Category>? Categories { get; set; }
+        [Required]
+        public bool IsAcvive { get; set; } = true;
 
     }
 }

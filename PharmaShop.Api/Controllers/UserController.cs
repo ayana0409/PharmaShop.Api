@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PharmaShop.Api.Models.Response;
-using PharmaShop.Api.Services;
+using PharmaShop.Application.Models.Response;
+using PharmaShop.Application.Services;
 using PharmaShop.Infastructure.Models;
 using System.Security.Claims;
 
-namespace PharmaShop.Api.Controllers
+namespace PharmaShop.Application.Controllers
 {
     [Authorize]
     [ApiController]
