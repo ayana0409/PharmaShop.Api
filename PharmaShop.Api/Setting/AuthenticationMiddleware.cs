@@ -1,4 +1,4 @@
-﻿namespace PharmaShop.Api.Setting
+﻿namespace PharmaShop.Application.Setting
 {
     public class AuthenticationMiddleware
     {

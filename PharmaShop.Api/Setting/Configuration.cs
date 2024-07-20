@@ -5,12 +5,15 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using PharmaShop.Infastructure.Models;
-using PharmaShop.Api.Abtract;
-using PharmaShop.Api.Services;
+using PharmaShop.Application.Abtract;
+using PharmaShop.Application.Services;
 using Microsoft.OpenApi.Models;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Repositorys;
-namespace PharmaShop.Api.Setting
+using CloudinaryDotNet;
+using PharmaShop.Api.Abtract;
+using PharmaShop.Api.Services;
+namespace PharmaShop.Application.Setting
 {
     public static class Configuration
     {
@@ -60,13 +63,28 @@ namespace PharmaShop.Api.Setting
                 options.Cookie.SameSite = SameSiteMode.Strict; // Chỉ gửi cookie trong cùng một site
             });
 
+            services.AddSingleton(s =>
+            {
+                var cloudName = configuration["Cloudinary:CloudName"];
+                var apiKey = configuration["Cloudinary:ApiKey"];
+                var apiSecret = configuration["Cloudinary:ApiSecret"];
+
+                return new Cloudinary(new Account(cloudName, apiKey, apiSecret));
+            });
+
             services.AddAuthorization();
         }
         public static void AddDependencyInjection(this IServiceCollection services)
         {
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<ICloudinaryService, CloudinaryService>();
+
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IProductService, ProductService>();
+
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
         }
 
         public static void AddSwagger(this IServiceCollection services)
@@ -74,6 +92,8 @@ namespace PharmaShop.Api.Setting
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+
+                options.CustomSchemaIds(type => type.FullName);
 
                 options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

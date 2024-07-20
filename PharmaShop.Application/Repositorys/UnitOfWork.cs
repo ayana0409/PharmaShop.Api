@@ -2,11 +2,6 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Infastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PharmaShop.Application.Repositorys
 {
@@ -14,6 +9,8 @@ namespace PharmaShop.Application.Repositorys
     {
         private readonly ApplicationDbContext _applicationDbContext;
         private IDbContextTransaction _dbContextTransaction;
+        private ICategoryRepository? _categoryRepository;
+        private IProductRepository? _productRepository;
         public UnitOfWork(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
@@ -21,7 +18,8 @@ namespace PharmaShop.Application.Repositorys
         public DbSet<T> Table<T>() where T : class => _applicationDbContext.Set<T>();
 
         // Repository
-
+        public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_applicationDbContext);
+        public IProductRepository ProductRepository => _productRepository ??= new ProductRepository(_applicationDbContext);
         //
 
         public async Task BeginTransaction()

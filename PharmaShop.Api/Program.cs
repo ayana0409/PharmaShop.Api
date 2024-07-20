@@ -1,4 +1,4 @@
-using PharmaShop.Api.Setting;
+using PharmaShop.Application.Setting;
 using PharmaShop.Infastructure;
 
 var builder = WebApplication.CreateBuilder(args);

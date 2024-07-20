@@ -4,6 +4,9 @@ namespace PharmaShop.Application.Abtract
 {
     public interface IUnitOfWork
     {
+        ICategoryRepository CategoryRepository { get; }
+        IProductRepository ProductRepository { get; }
+
         Task BeginTransaction();
         Task CommitTransaction();
         void Dispose();

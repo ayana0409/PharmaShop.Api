@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PharmaShop.Infastructure.Data;
 using PharmaShop.Infastructure.Models;
-using PharmaShop.Api.Models;
+using PharmaShop.Application.Models;
 using PharmaShop.Infastructure.Entities;
 namespace PharmaShop.Infastructure
 {

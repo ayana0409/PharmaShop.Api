@@ -1,4 +1,4 @@
-namespace PharmaShop.Api
+namespace PharmaShop.Application
 {
     public class WeatherForecast
     {

@@ -1,7 +1,7 @@
-﻿using PharmaShop.Api.Models.Request;
-using PharmaShop.Api.Models.Response;
+﻿using PharmaShop.Application.Models.Request;
+using PharmaShop.Application.Models.Response;
 
-namespace PharmaShop.Api.Abtract
+namespace PharmaShop.Application.Abtract
 {
     public interface IAuthService
     {

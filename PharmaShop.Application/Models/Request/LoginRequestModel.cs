@@ -1,4 +1,4 @@
-﻿namespace PharmaShop.Api.Models.Request
+﻿namespace PharmaShop.Application.Models.Request
 {
     public class LoginRequestModel
     {

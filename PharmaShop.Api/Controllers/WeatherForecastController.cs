@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PharmaShop.Api.Controllers
+namespace PharmaShop.Application.Controllers
 {
     [Authorize(Roles = "SuperAdmin")]
     [ApiController]

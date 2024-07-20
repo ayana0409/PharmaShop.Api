@@ -1,7 +1,4 @@
-﻿
-using PharmaShop.Infastructure.Entities;
-
-namespace PharmaShop.Api.Models.Response
+﻿namespace PharmaShop.Application.Models.Response
 {
     public class CategoryTableResponseModel
     {

@@ -1,4 +1,4 @@
-﻿namespace PharmaShop.Api.Models
+﻿namespace PharmaShop.Application.Models
 {
     public class DefaultUser
     {

@@ -12,5 +12,7 @@ namespace PharmaShop.Infastructure.Entities
         public int ProductId { get; set; }
         [ForeignKey(nameof(ProductId))]
         public Product? Product { get; set; }
+        [Required]
+        public bool IsActive { get; set; }
     }
 }
