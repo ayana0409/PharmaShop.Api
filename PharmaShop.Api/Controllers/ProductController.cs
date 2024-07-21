@@ -1,13 +1,8 @@
-﻿using CloudinaryDotNet.Actions;
-using CloudinaryDotNet;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
-using PharmaShop.Application.Abtract;
 using Newtonsoft.Json;
 using PharmaShop.Api.Abtract;
-using PharmaShop.Infastructure.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace PharmaShop.Application.Controllers
 {
@@ -15,12 +10,10 @@ namespace PharmaShop.Application.Controllers
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IProductService _productService;
 
-        public ProductController(IUnitOfWork unitOfWork, IProductService productService)
+        public ProductController(IProductService productService)
         {
-            _unitOfWork = unitOfWork;
             _productService = productService;
         }
 
@@ -50,35 +43,15 @@ namespace PharmaShop.Application.Controllers
         {
             var data = JsonConvert.DeserializeObject<TableRequestModel>(request);
 
-            var (result, total) = await _unitOfWork.ProductRepository.GetProductPanigationAsync(data.PageIndex, data.PageSize, data.Keyword = string.Empty);
-
-            List<ProductResponseModel> datas = [];
-
-            var categories = await _unitOfWork.Table<Category>().ToListAsync();
-
-            foreach (var item in result)
+            if(data == null)
             {
-                datas.Add(new ProductResponseModel
-                {
-                    Id = item.Id,
-                    Name = item.Name ?? "",
-                    Brand = item.Brand ?? "",
-                    Packaging = item.Packaging ?? "",
-                    Price = item.BigUnitPrice,
-                    CategoryId = item.CategoryId,
-                    CategoryName = categories.FirstOrDefault(c => c.Id == item.CategoryId).Name
-                });
+                return BadRequest();
             }
 
-            return Ok(new TableResponseModel<ProductResponseModel>
-            {
-                PageSize = data.PageSize,
-                Datas = datas,
-                Total = total
-            });
+            return Ok(await _productService.GetPanigation(data));
         }
 
-        [HttpPost("add")]  
+        [HttpPost("add")]
         public async Task<ActionResult> Add([FromForm] string data, List<IFormFile> images)
         {
             try
@@ -90,11 +63,7 @@ namespace PharmaShop.Application.Controllers
                     throw new Exception(message: "model error");
                 }
 
-                if (string.IsNullOrEmpty(model.Name) || string.IsNullOrEmpty(model.Brand) || string.IsNullOrEmpty(model.Packaging)
-                || model.CategoryId == 0)
-                {
-                    throw new Exception(message: "Require field is empty");
-                }
+                CheckModelValid(model);
 
                 await _productService.Add(model, images);
 
@@ -107,15 +76,55 @@ namespace PharmaShop.Application.Controllers
         }
 
         // PUT api/<ProductController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("update/{id}")]
+        public async Task<ActionResult> Update(int id, [FromForm] string data, List<IFormFile> images, [FromForm] string imageUrls)
         {
+            try
+            {
+                var model = JsonConvert.DeserializeObject<ProductRequestModel>(data);
+
+                if (model == null)
+                {
+                    throw new Exception(message: "model error");
+                }
+
+                CheckModelValid(model);
+
+                var url = JsonConvert.DeserializeObject<List<string>>(imageUrls);
+
+                await _productService.Update(id, model, images, url ?? []);
+
+                return Ok(new { Message = "Update successfuly" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // DELETE api/<ProductController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        private void CheckModelValid(ProductRequestModel model)
+        {
+            if (string.IsNullOrEmpty(model.Name)
+                || string.IsNullOrEmpty(model.Brand)
+                || string.IsNullOrEmpty(model.Packaging)
+                || model.CategoryId == 0)
+            {
+                throw new Exception(message: "Require field is empty");
+            }
+
+            foreach (var detail in model.Details)
+            {
+                if (string.IsNullOrEmpty(detail.Content) || string.IsNullOrEmpty(detail.Content))
+                {
+                    throw new Exception(message: "Require fields is empty");
+                }
+            }
         }
     }
 }

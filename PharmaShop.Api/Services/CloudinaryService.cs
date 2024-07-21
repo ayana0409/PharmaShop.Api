@@ -39,5 +39,11 @@ namespace PharmaShop.Api.Services
 
             return uploadResult.Url.ToString();
         }
+
+        public async Task DeleteAsync(string imageId)
+        {
+            var deletionParams = new DeletionParams(imageId);
+            await _cloudinary.DestroyAsync(deletionParams);
+        }
     }
 }
