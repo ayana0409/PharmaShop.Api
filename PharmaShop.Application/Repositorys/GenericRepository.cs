@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PharmaShop.Infastructure.Data;
+using PharmaShop.Infastructure.Entities;
 using System.Linq.Expressions;
 
 namespace PharmaShop.Application.Repositorys
@@ -40,5 +41,6 @@ namespace PharmaShop.Application.Repositorys
             _applicationDbContext.Set<T>().Attach(entity);
             _applicationDbContext.Entry(entity).State = EntityState.Deleted;
         }
+
     }
 }

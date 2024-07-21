@@ -1,7 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using PharmaShop.Application.Abtract;
-using PharmaShop.Application.Models.Request;
-using PharmaShop.Application.Models.Response;
+﻿using PharmaShop.Application.Abtract;
 using PharmaShop.Infastructure.Data;
 using PharmaShop.Infastructure.Entities;
 
@@ -19,7 +16,7 @@ namespace PharmaShop.Application.Repositorys
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(c => c.Name.Contains(keyword));
+                query = query.Where(c => c.Name != null && c.Name.Contains(keyword));
             }
 
             var products = query
@@ -40,6 +37,15 @@ namespace PharmaShop.Application.Repositorys
         public async Task Add(Product product)
         {
             await base.CreateAsync(product);
+        }
+        public void Edit(Product product)
+        {
+            base.Update(product);
+        }
+        public void Remove(Product product)
+        {
+            product.IsActive = false;
+            base.Update(product);
         }
     }
 }

@@ -6,6 +6,8 @@ namespace PharmaShop.Application.Abtract
     {
         ICategoryRepository CategoryRepository { get; }
         IProductRepository ProductRepository { get; }
+        IProductDetailRepository ProductDetailRepository { get; }
+        IImageRepository ImageRepository { get; }
 
         Task BeginTransaction();
         Task CommitTransaction();

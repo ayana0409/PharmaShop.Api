@@ -8,7 +8,6 @@ using PharmaShop.Infastructure.Models;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Services;
 using Microsoft.OpenApi.Models;
-using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Repositorys;
 using CloudinaryDotNet;
 using PharmaShop.Api.Abtract;
@@ -52,7 +51,7 @@ namespace PharmaShop.Application.Setting
                     ValidateAudience = true,
                     ValidAudience = configuration["JWT:ValidAudience"],
                     ValidIssuer = configuration["JWT:ValidIssuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"] ?? throw new ApplicationException(message: "No JWT:Secret")))
                 };
             });
 
@@ -62,7 +61,7 @@ namespace PharmaShop.Application.Setting
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Chỉ gửi cookie qua HTTPS
                 options.Cookie.SameSite = SameSiteMode.Strict; // Chỉ gửi cookie trong cùng một site
             });
-
+            
             services.AddSingleton(s =>
             {
                 var cloudName = configuration["Cloudinary:CloudName"];
@@ -82,9 +81,11 @@ namespace PharmaShop.Application.Setting
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProductService, ProductService>();
-
+            
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IProductDetailRepository, ProductDetailRepository>();
+            services.AddTransient<IImageRepository, ImageRepository>();
         }
 
         public static void AddSwagger(this IServiceCollection services)

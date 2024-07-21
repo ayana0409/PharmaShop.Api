@@ -7,5 +7,7 @@ namespace PharmaShop.Api.Abtract
     {
         Task Add(ProductRequestModel data, List<IFormFile> images);
         Task<ProductForUpdateResponse> GetForUpdate(int id);
+        Task<TableResponseModel<ProductResponseModel>> GetPanigation(TableRequestModel request);
+        Task Update(int id, ProductRequestModel data, List<IFormFile> images, List<string> imageUrl);
     }
 }
