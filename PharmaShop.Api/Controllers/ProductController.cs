@@ -3,9 +3,11 @@ using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
 using Newtonsoft.Json;
 using PharmaShop.Api.Abtract;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PharmaShop.Application.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
@@ -103,9 +105,18 @@ namespace PharmaShop.Application.Controllers
         }
 
         // DELETE api/<ProductController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("delete/{id}")]
+        public async Task<ActionResult> Delete(int id)
         {
+            try
+            {
+                await _productService.Delete(id);
+                return Ok(new { Message = "Delete successfuly" });
+            }
+            catch (Exception ex) 
+            { 
+                return BadRequest(ex.Message);
+            }
         }
 
         private void CheckModelValid(ProductRequestModel model)

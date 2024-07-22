@@ -1,14 +1,9 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Infastructure.Entities;
-using System.Collections.Generic;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace PharmaShop.Application.Controllers
 {

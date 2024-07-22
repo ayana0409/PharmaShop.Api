@@ -20,7 +20,8 @@ namespace PharmaShop.Api.Services
 
         public async Task<TableResponseModel<ProductResponseModel>> GetPanigation(TableRequestModel request)
         {
-            var (result, total) = await _unitOfWork.ProductRepository.GetProductPanigationAsync(request.PageIndex, request.PageSize, request.Keyword = string.Empty);
+            var (result, total) = await _unitOfWork.ProductRepository
+                .GetProductPanigationAsync(request.PageIndex, request.PageSize, request.Keyword = string.Empty);
             List<ProductResponseModel> datas = [];
             var categories = await _unitOfWork.Table<Category>().ToListAsync();
 
@@ -197,7 +198,41 @@ namespace PharmaShop.Api.Services
                 await AddImageList(id, insertImage);
 
                 await _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.CommitTransaction();
+            }
+            catch (Exception ex)
+            {
+                await _unitOfWork.RollBackTransaction();
+                throw new Exception(message: ex.Message);
+            }
+        }
 
+        public async Task Delete(int productId)
+        {
+            try
+            {
+                await _unitOfWork.BeginTransaction();
+
+                var productImages = await _unitOfWork.ImageRepository.GetByProductIdAsync(productId);
+
+                foreach (var image in productImages)
+                {
+                    var uri = new Uri(image.Path ?? "");
+                    var segments = uri.Segments;
+                    if (segments.Length >= 3)
+                    {
+                        var publicIdWithFormat = segments[^1];
+                        var publicId = publicIdWithFormat.Substring(0, publicIdWithFormat.LastIndexOf('.'));
+
+                        await _cloudinaryService.DeleteAsync(publicId);
+
+                        _unitOfWork.ImageRepository.Remove(image);
+                    }
+                }
+
+                await _unitOfWork.ProductRepository.Remove(productId);
+
+                await _unitOfWork.SaveChangeAsync();
                 await _unitOfWork.CommitTransaction();
             }
             catch (Exception ex)
@@ -218,12 +253,13 @@ namespace PharmaShop.Api.Services
 
             var listDetails = _unitOfWork.Table<ProductDetail>().Where(d => d.ProductId == id);
 
-            List<ProductDetailRequest> details = listDetails != null ? listDetails.Select(detail => new ProductDetailRequest
-            {
-                Id = detail.Id,
-                Content = detail.Content,
-                Name = detail.Name
-            }).ToList() : [];
+            List<ProductDetailRequest> details = listDetails != null 
+                                ? listDetails.Select(detail => new ProductDetailRequest
+                                                        {
+                                                            Id = detail.Id,
+                                                            Content = detail.Content,
+                                                            Name = detail.Name
+                                                        }).ToList() : [];
 
             var listImages = _unitOfWork.Table<Image>().Where(d => d.ProductId == id);
 
