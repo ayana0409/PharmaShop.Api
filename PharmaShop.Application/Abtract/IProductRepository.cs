@@ -10,5 +10,6 @@ namespace PharmaShop.Application.Abtract
         void Edit(Product product);
         Task<(IEnumerable<Product>, int)> GetProductPanigationAsync(int pageIndex, int pageSize, string keyword = "");
         Task<Product?> GetSigleAsync(int id);
+        Task Remove(int productId);
     }
 }

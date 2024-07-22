@@ -20,6 +20,7 @@ namespace PharmaShop.Application.Repositorys
             }
 
             var products = query
+                .Where(p => p.IsActive == true)
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize)
                 .ToList();
@@ -42,10 +43,15 @@ namespace PharmaShop.Application.Repositorys
         {
             base.Update(product);
         }
-        public void Remove(Product product)
+        public async Task Remove(int productId)
         {
-            product.IsActive = false;
-            base.Update(product);
+            var product = await base.GetSigleAsync(p => p.Id == productId);
+
+            if (product != null)
+            {
+                product.IsActive = false;
+                base.Update(product);
+            }
         }
     }
 }
