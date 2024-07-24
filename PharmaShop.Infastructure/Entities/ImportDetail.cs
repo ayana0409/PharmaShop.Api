@@ -21,7 +21,7 @@ namespace PharmaShop.Infastructure.Entities
         [ForeignKey(nameof(ProductId))]
         public Product? Product { get; set; }
         [Required]
-        public int? ImportId { get; set; }
+        public int ImportId { get; set; }
         [ForeignKey(nameof(ImportId))]
         public Import? Import { get; set; }
     }

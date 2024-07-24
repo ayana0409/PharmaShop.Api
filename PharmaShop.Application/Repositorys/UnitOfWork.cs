@@ -13,6 +13,7 @@ namespace PharmaShop.Application.Repositorys
         private IProductRepository? _productRepository;
         private IProductDetailRepository? _productDetailRepository;
         private IImageRepository? _imageRepository;
+        private IImportRepository? _importRepository;
         public UnitOfWork(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
@@ -24,6 +25,7 @@ namespace PharmaShop.Application.Repositorys
         public IProductRepository ProductRepository => _productRepository ??= new ProductRepository(_applicationDbContext);
         public IProductDetailRepository ProductDetailRepository => _productDetailRepository ??= new ProductDetailRepository(_applicationDbContext);
         public IImageRepository ImageRepository => _imageRepository ??= new ImageRepository(_applicationDbContext);
+        public IImportRepository ImportRepository => _importRepository ??= new ImportRepository(_applicationDbContext);
         //
 
         public async Task BeginTransaction()

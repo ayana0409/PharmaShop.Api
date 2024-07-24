@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace PharmaShop.Infastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initDb : Migration
+    public partial class initialDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -191,7 +191,7 @@ namespace PharmaShop.Infastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false),
-                    Content = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: false),
+                    Content = table.Column<string>(type: "varchar(5000)", maxLength: 5000, nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -239,15 +239,16 @@ namespace PharmaShop.Infastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     ImportDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    totalCost = table.Column<double>(type: "double", nullable: false),
-                    ProviderId = table.Column<string>(type: "varchar(255)", nullable: false)
+                    TotalCost = table.Column<double>(type: "double", nullable: false),
+                    SupplierId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Imports", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Imports_ApplicationUser_ProviderId",
-                        column: x => x.ProviderId,
+                        name: "FK_Imports_ApplicationUser_SupplierId",
+                        column: x => x.SupplierId,
                         principalTable: "ApplicationUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -493,9 +494,9 @@ namespace PharmaShop.Infastructure.Migrations
                 column: "ImportId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Imports_ProviderId",
+                name: "IX_Imports_SupplierId",
                 table: "Imports",
-                column: "ProviderId");
+                column: "SupplierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_OrderId",
