@@ -204,16 +204,19 @@ namespace PharmaShop.Infastructure.Migrations
                     b.Property<DateTime>("ImportDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("ProviderId")
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupplierId")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
-                    b.Property<double>("totalCost")
+                    b.Property<double>("TotalCost")
                         .HasColumnType("double");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProviderId");
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Imports");
                 });
@@ -376,8 +379,8 @@ namespace PharmaShop.Infastructure.Migrations
 
                     b.Property<string>("Content")
                         .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("varchar(2000)");
+                        .HasMaxLength(5000)
+                        .HasColumnType("varchar(5000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -664,13 +667,13 @@ namespace PharmaShop.Infastructure.Migrations
 
             modelBuilder.Entity("PharmaShop.Infastructure.Entities.Import", b =>
                 {
-                    b.HasOne("PharmaShop.Infastructure.Models.ApplicationUser", "Provider")
+                    b.HasOne("PharmaShop.Infastructure.Models.ApplicationUser", "Supplier")
                         .WithMany()
-                        .HasForeignKey("ProviderId")
+                        .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Provider");
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("PharmaShop.Infastructure.Entities.ImportDetail", b =>

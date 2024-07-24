@@ -1,4 +1,5 @@
-﻿using PharmaShop.Infastructure.Models;
+﻿using PharmaShop.Infastructure.Enum;
+using PharmaShop.Infastructure.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,11 +9,12 @@ namespace PharmaShop.Infastructure.Entities
     {
         [Required]
         public DateTime ImportDate { get; set; }
-        public double totalCost { get; set; }
+        public double TotalCost { get; set; }
         [Required]
-        public string? ProviderId { get; set; }
-        [ForeignKey(nameof(ProviderId))]
-        public ApplicationUser? Provider { get; set; }
+        public string? SupplierId { get; set; }
+        [ForeignKey(nameof(SupplierId))]
+        public ApplicationUser? Supplier { get; set; }
+        public StatusProcessing Status { get; set; } = StatusProcessing.New;
         public ICollection<ImportDetail>? Details { get; set; }
     }
 }

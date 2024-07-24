@@ -104,7 +104,6 @@ namespace PharmaShop.Application.Controllers
             }
         }
 
-        // DELETE api/<ProductController>/5
         [HttpDelete("delete/{id}")]
         public async Task<ActionResult> Delete(int id)
         {

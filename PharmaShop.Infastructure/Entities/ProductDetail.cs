@@ -9,7 +9,7 @@ namespace PharmaShop.Infastructure.Entities
         [StringLength(500)]
         public string? Name { get; set; }
         [Required]
-        [StringLength(2000)]
+        [StringLength(5000)]
         public string? Content { get; set; }
         [Required]
         public int ProductId { get; set; }

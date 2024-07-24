@@ -1,6 +1,7 @@
 ﻿using PharmaShop.Application.Abtract;
 using PharmaShop.Infastructure.Data;
 using PharmaShop.Infastructure.Entities;
+using ZstdSharp.Unsafe;
 
 namespace PharmaShop.Application.Repositorys
 {
@@ -16,11 +17,17 @@ namespace PharmaShop.Application.Repositorys
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(c => c.Name != null && c.Name.Contains(keyword));
+                query = query.Where(c => c.IsActive == true &&
+                                        c.Name != null && 
+                                        (c.Name.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)
+                                        || c.Id.ToString().Contains(keyword, StringComparison.CurrentCultureIgnoreCase)));
+            }
+            else
+            {
+                query = query.Where(p => p.IsActive == true);
             }
 
             var products = query
-                .Where(p => p.IsActive == true)
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize)
                 .ToList();

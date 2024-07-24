@@ -21,7 +21,7 @@ namespace PharmaShop.Api.Services
         public async Task<TableResponseModel<ProductResponseModel>> GetPanigation(TableRequestModel request)
         {
             var (result, total) = await _unitOfWork.ProductRepository
-                .GetProductPanigationAsync(request.PageIndex, request.PageSize, request.Keyword = string.Empty);
+                .GetProductPanigationAsync(request.PageIndex, request.PageSize, request.Keyword ?? "");
             List<ProductResponseModel> datas = [];
             var categories = await _unitOfWork.Table<Category>().ToListAsync();
 
