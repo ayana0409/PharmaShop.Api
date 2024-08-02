@@ -44,7 +44,7 @@ namespace PharmaShop.Api.Services
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<TableResponseModel<ImportResponse>> GetPanigationAsync(string supplierId, TableRequestModel request)
+        public async Task<TableResponse<ImportResponse>> GetPanigationAsync(string supplierId, TableRequest request)
         {
             var (result, total) = await _unitOfWork.ImportRepository.GetPanigationAsync(supplierId, request.PageIndex, request.PageSize, request.Keyword ?? "");
             List<ImportResponse> datas = [];
@@ -61,7 +61,7 @@ namespace PharmaShop.Api.Services
                 });
             }
 
-            return new TableResponseModel<ImportResponse>
+            return new TableResponse<ImportResponse>
             {
                 PageSize = request.PageSize,
                 Datas = datas,
@@ -168,7 +168,7 @@ namespace PharmaShop.Api.Services
                         .Where(d => d.ImportId == importId)
                         .Select(d => new ImportDetailResponse
                         {
-                            Id = d.ImportId,
+                            ImportId = d.ImportId,
                             ProductId = d.ProductId,
                             ProductName = d.Product.Name,
                             BatchNumber = d.BatchNumber,
@@ -194,7 +194,7 @@ namespace PharmaShop.Api.Services
 
                 if (result == null)
                 {
-                    await _unitOfWork.Table<ImportDetail>().AddAsync(new ImportDetail
+                    await _unitOfWork.ImportDetailRepository.AddDetailAsync(new ImportDetail
                     {
                         ImportId = request.ImportId,
                         ProductId = request.ProductId,

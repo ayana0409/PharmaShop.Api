@@ -2,9 +2,9 @@
 
 namespace PharmaShop.Application.Models.Response
 {
-    public class AuthResponseModel
+    public class AuthResponse
     {
-        public AuthResponseModel(string token = "")
+        public AuthResponse(string token = "")
         {
             Token = token;
         }

@@ -19,7 +19,7 @@ namespace PharmaShop.Application.Controllers
             _userService = userService;
         }
         [HttpGet("getuserinfo")]
-        public async Task<ActionResult<CustomerInfoResponseModel>> UserInfo()
+        public async Task<ActionResult<CustomerInfoResponse>> UserInfo()
         {
             try
             {
@@ -32,7 +32,7 @@ namespace PharmaShop.Application.Controllers
                     throw new Exception(message: "Invalid user.");
                 }
 
-                CustomerInfoResponseModel response = new();
+                CustomerInfoResponse response = new();
 
                 response.FullName = user.FullName ?? "No name";
                 response.Type = user.Type == null ? "No type" : user.Type.Name;

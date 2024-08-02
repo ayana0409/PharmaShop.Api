@@ -1,6 +1,6 @@
 ﻿namespace PharmaShop.Application.Models.Response
 {
-    public class ProductResponseModel
+    public class ProductResponse
     {
         public int Id { get; set; }
         public string Name { get; set; } = "";

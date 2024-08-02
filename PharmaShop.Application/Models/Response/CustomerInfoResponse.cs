@@ -1,6 +1,6 @@
 ﻿namespace PharmaShop.Application.Models.Response
 {
-    public class CustomerInfoResponseModel
+    public class CustomerInfoResponse
     {
         public string? FullName { get; set; }
         public int Point {  get; set; }

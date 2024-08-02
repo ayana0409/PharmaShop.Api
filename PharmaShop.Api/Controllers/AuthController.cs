@@ -16,7 +16,7 @@ namespace PharmaShop.Application.Controllers
             _authService = authService;
         }
         [HttpPost("login")]
-        public async Task<ActionResult<AuthResponseModel>> Login(LoginRequestModel loginUser)
+        public async Task<ActionResult<AuthResponse>> Login(LoginRequest loginUser)
         {
             try
             {

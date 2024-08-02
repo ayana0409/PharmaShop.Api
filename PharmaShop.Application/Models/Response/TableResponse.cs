@@ -1,6 +1,6 @@
 ﻿namespace PharmaShop.Application.Models.Response
 {
-    public class TableResponseModel<T> where T : class
+    public class TableResponse<T> where T : class
     {
         public int PageSize { get; set; }
         public IEnumerable<T> Datas { get; set; } = [];

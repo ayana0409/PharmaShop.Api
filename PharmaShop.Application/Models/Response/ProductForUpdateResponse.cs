@@ -21,6 +21,6 @@ namespace PharmaShop.Application.Models.Response
         public bool RequirePrescription { get; set; }
 
         public List<ProductDetailRequest> Details { get; set; } = [];
-        public List<string?> Images { get; set; } = [];
+        public List<string> Images { get; set; } = [];
     }
 }

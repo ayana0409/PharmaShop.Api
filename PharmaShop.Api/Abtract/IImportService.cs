@@ -12,7 +12,7 @@ namespace PharmaShop.Api.Services
         Task DeleteImportAsync(int importId);
         Task<ImportResponse> GetAsync(int id);
         Task<List<ImportDetailResponse>> GetDetailsByIdAsync(int importId);
-        Task<TableResponseModel<ImportResponse>> GetPanigationAsync(string supplierId, TableRequestModel request);
+        Task<TableResponse<ImportResponse>> GetPanigationAsync(string supplierId, TableRequest request);
         Task RemoveDetails(int importId, int productId);
         Task UpdateDetailAsync(ImportDetailRequest request);
     }

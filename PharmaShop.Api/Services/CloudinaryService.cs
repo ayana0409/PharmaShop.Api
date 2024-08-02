@@ -1,12 +1,14 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using PharmaShop.Api.Abtract;
+using System.Text.RegularExpressions;
 
 namespace PharmaShop.Api.Services
 {
     public class CloudinaryService : ICloudinaryService
     {
         private readonly Cloudinary _cloudinary;
+        private readonly string _folder = "PharmaShop/Product";
 
         public CloudinaryService(Cloudinary cloudinary)
         {
@@ -25,7 +27,7 @@ namespace PharmaShop.Api.Services
                     {
                         File = new FileDescription(file.FileName, stream),
                         Transformation = new Transformation().Crop("fill").Gravity("face").Width(500).Height(500),
-                        Folder = "PharmaShop/Product"
+                        Folder = _folder
                     };
 
                     uploadResult = await _cloudinary.UploadAsync(uploadParams);
@@ -40,10 +42,28 @@ namespace PharmaShop.Api.Services
             return uploadResult.Url.ToString();
         }
 
-        public async Task DeleteAsync(string imageId)
+        public async Task DeleteAsync(string imageUrl)
         {
-            var deletionParams = new DeletionParams(imageId);
-            await _cloudinary.DestroyAsync(deletionParams);
+            string pattern = _folder + @"/([^/]+)\.png";
+            Match match = Regex.Match(imageUrl, pattern);
+
+            if (match.Success)
+            {
+                string publicId = _folder + "/" + match.Groups[1].Value;
+                var deletionParams = new DeletionParams(publicId);
+                var result = await _cloudinary.DestroyAsync(deletionParams);
+
+                if (result.Result != "ok")
+                {
+                    var errorMessage = result.Error?.Message ?? "Unknown error occurred.";
+                    throw new Exception($"Failed to delete image: {errorMessage}");
+                }
+            }
+            else
+            {
+                throw new Exception("No match found.");
+            }
         }
+
     }
 }

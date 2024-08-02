@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PharmaShop.Infastructure.Data;
 
@@ -10,9 +11,11 @@ using PharmaShop.Infastructure.Data;
 namespace PharmaShop.Infastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240730080727_initalDB")]
+    partial class initalDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,50 +148,6 @@ namespace PharmaShop.Infastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UserToken", (string)null);
-                });
-
-            modelBuilder.Entity("PharmaShop.Infastructure.Entities.Cart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("PharmaShop.Infastructure.Entities.CartItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("PharmaShop.Infastructure.Entities.Category", b =>
@@ -689,36 +648,6 @@ namespace PharmaShop.Infastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PharmaShop.Infastructure.Entities.Cart", b =>
-                {
-                    b.HasOne("PharmaShop.Infastructure.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PharmaShop.Infastructure.Entities.CartItem", b =>
-                {
-                    b.HasOne("PharmaShop.Infastructure.Entities.Cart", "Cart")
-                        .WithMany("CartItems")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PharmaShop.Infastructure.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("PharmaShop.Infastructure.Entities.Category", b =>
                 {
                     b.HasOne("PharmaShop.Infastructure.Entities.Category", "ParentCategory")
@@ -850,11 +779,6 @@ namespace PharmaShop.Infastructure.Migrations
                         .HasForeignKey("TypeId");
 
                     b.Navigation("Type");
-                });
-
-            modelBuilder.Entity("PharmaShop.Infastructure.Entities.Cart", b =>
-                {
-                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("PharmaShop.Infastructure.Entities.Category", b =>

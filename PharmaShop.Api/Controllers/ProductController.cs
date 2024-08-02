@@ -41,9 +41,9 @@ namespace PharmaShop.Application.Controllers
         }
 
         [HttpPost("getpanigation")]
-        public async Task<ActionResult<TableResponseModel<ProductResponseModel>>> GetPanigation([FromForm] string request)
+        public async Task<ActionResult<TableResponse<ProductResponse>>> GetPanigation([FromForm] string request)
         {
-            var data = JsonConvert.DeserializeObject<TableRequestModel>(request);
+            var data = JsonConvert.DeserializeObject<TableRequest>(request);
 
             if(data == null)
             {
@@ -58,7 +58,7 @@ namespace PharmaShop.Application.Controllers
         {
             try
             {
-                var model = JsonConvert.DeserializeObject<ProductRequestModel>(data);
+                var model = JsonConvert.DeserializeObject<ProductRequest>(data);
 
                 if (model == null)
                 {
@@ -83,7 +83,7 @@ namespace PharmaShop.Application.Controllers
         {
             try
             {
-                var model = JsonConvert.DeserializeObject<ProductRequestModel>(data);
+                var model = JsonConvert.DeserializeObject<ProductRequest>(data);
 
                 if (model == null)
                 {
@@ -118,7 +118,7 @@ namespace PharmaShop.Application.Controllers
             }
         }
 
-        private void CheckModelValid(ProductRequestModel model)
+        private void CheckModelValid(ProductRequest model)
         {
             if (string.IsNullOrEmpty(model.Name)
                 || string.IsNullOrEmpty(model.Brand)

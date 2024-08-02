@@ -20,15 +20,15 @@ namespace PharmaShop.Application.Controllers
         }
 
         [HttpGet("categorytable")]
-        public List<CategoryTableResponseModel> GetForTable()
+        public List<CategoryTableResponse> GetForTable()
         {
             var data = _unitOfWork.Table<Category>().Where(c => c.IsAcvive == true).ToList();
 
-            List<CategoryTableResponseModel> result = [];
+            List<CategoryTableResponse> result = [];
 
             foreach (var item in data)
             {
-                result.Add(new CategoryTableResponseModel
+                result.Add(new CategoryTableResponse
                 {
                     Id = item.Id,
                     Name = item.Name ?? "Noname",
@@ -42,7 +42,7 @@ namespace PharmaShop.Application.Controllers
 
         // POST api/<CategoryController>
         [HttpPost("addcategory")]
-        public async Task<ActionResult> AddCategory([FromBody] CategoryRequestModel value)
+        public async Task<ActionResult> AddCategory([FromBody] CategoryRequest value)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace PharmaShop.Application.Controllers
 
         // PUT api/<CategoryController>/5
         [HttpPut("update")]
-        public ActionResult Update([FromBody] CategoryRequestModel value)
+        public ActionResult Update([FromBody] CategoryRequest value)
         {
             try
             {
