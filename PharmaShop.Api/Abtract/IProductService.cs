@@ -5,10 +5,10 @@ namespace PharmaShop.Api.Abtract
 {
     public interface IProductService
     {
-        Task Add(ProductRequestModel data, List<IFormFile> images);
+        Task Add(ProductRequest data, List<IFormFile> images);
         Task Delete(int productId);
         Task<ProductForUpdateResponse> GetForUpdate(int id);
-        Task<TableResponseModel<ProductResponseModel>> GetPanigation(TableRequestModel request);
-        Task Update(int id, ProductRequestModel data, List<IFormFile> images, List<string> imageUrl);
+        Task<TableResponse<ProductResponse>> GetPanigation(TableRequest request);
+        Task Update(int id, ProductRequest data, List<IFormFile> images, List<string> imageUrl);
     }
 }

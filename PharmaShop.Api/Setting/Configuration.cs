@@ -55,13 +55,6 @@ namespace PharmaShop.Application.Setting
                 };
             });
 
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.HttpOnly = true; // Bảo vệ chống tấn công XSS
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Chỉ gửi cookie qua HTTPS
-                options.Cookie.SameSite = SameSiteMode.Strict; // Chỉ gửi cookie trong cùng một site
-            });
-            
             services.AddSingleton(s =>
             {
                 var cloudName = configuration["Cloudinary:CloudName"];
@@ -82,12 +75,16 @@ namespace PharmaShop.Application.Setting
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IImportService, ImportService>();
+            services.AddTransient<IShopService, ShopService>();
+            services.AddTransient<ICartService, CartService>();
 
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IProductDetailRepository, ProductDetailRepository>();
             services.AddTransient<IImageRepository, ImageRepository>();
             services.AddTransient<IImportRepository, ImportRepository>();
+            services.AddTransient<IImportDetailRepository, ImportDetailRepository>();
+            services.AddTransient<ICartItemRepository, CartItemRepository>();
         }
 
         public static void AddSwagger(this IServiceCollection services)

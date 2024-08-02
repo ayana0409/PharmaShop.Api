@@ -32,6 +32,7 @@ namespace PharmaShop.Application.Repositorys
             return (imports, total);
         }
 
+
         public async Task<bool> CompleteImportAsync(int importId)
         {
             var import = await base.GetSigleAsync(i => i.Id ==  importId);

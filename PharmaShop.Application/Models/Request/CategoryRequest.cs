@@ -1,6 +1,6 @@
 ﻿namespace PharmaShop.Application.Models.Request
 {
-    public class CategoryRequestModel
+    public class CategoryRequest
     {
         public int Id { get; set; }
         public string Name { get; set; }

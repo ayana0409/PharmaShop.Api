@@ -37,11 +37,13 @@ namespace PharmaShop.Api.Controllers
         }
 
         [HttpPost("getpanigation")]
-        public async Task<ActionResult<TableResponseModel<ProductResponseModel>>> GetPanigation([FromForm] string request)
+        public async Task<ActionResult<TableResponse<ProductResponse>>> GetPanigation([FromForm] string request)
         {
-            var data = JsonConvert.DeserializeObject<TableRequestModel>(request);
+            var data = JsonConvert.DeserializeObject<TableRequest>(request);
 
-            var username = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (username == null) { return Unauthorized(); }
 
             ApplicationUser? user = await _userService.GetUserByUserNameAsync(username);
 
@@ -81,7 +83,9 @@ namespace PharmaShop.Api.Controllers
         {
             try
             {
-                var username = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (username == null) { return Unauthorized(); }
 
                 ApplicationUser? user = await _userService.GetUserByUserNameAsync(username);
 

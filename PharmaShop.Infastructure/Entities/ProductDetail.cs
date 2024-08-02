@@ -7,10 +7,10 @@ namespace PharmaShop.Infastructure.Entities
     {
         [Required]
         [StringLength(500)]
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         [Required]
         [StringLength(5000)]
-        public string? Content { get; set; }
+        public string Content { get; set; } = string.Empty;
         [Required]
         public int ProductId { get; set; }
         [ForeignKey(nameof(ProductId))]

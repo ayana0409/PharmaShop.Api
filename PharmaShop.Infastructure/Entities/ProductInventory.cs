@@ -6,7 +6,7 @@ namespace PharmaShop.Infastructure.Entities
     public class ProductInventory : BaseEntity
     {
         [Required]
-        public string? BatchNumber { get; set; }
+        public string BatchNumber { get; set; } = string.Empty;
         [Required]
         public DateTime ManufactureDate { get; set; }
         [Required]

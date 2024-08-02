@@ -1,4 +1,5 @@
-﻿using PharmaShop.Application.Abtract;
+﻿using Microsoft.VisualBasic;
+using PharmaShop.Application.Abtract;
 using PharmaShop.Infastructure.Data;
 using PharmaShop.Infastructure.Entities;
 
@@ -14,7 +15,6 @@ namespace PharmaShop.Application.Repositorys
         {
             var query = await base.GetAllAsync();
 
-            // Áp dụng tìm kiếm nếu có từ khóa
             if (!string.IsNullOrEmpty(keyword))
             {
                 query = query.Where(c => c.Name.Contains(keyword));
@@ -27,6 +27,15 @@ namespace PharmaShop.Application.Repositorys
                 .ToList();
 
             return categories;
+        }
+
+        public async Task<IEnumerable<Category>> GetCategoriesWithoutParentAsync()
+        {
+            return await base.GetAllAsync(c => c.ParentId == null);
+        }
+        public async Task<IEnumerable<Category>> GetChildrenAsync(int CatregoryId)
+        {
+            return await base.GetAllAsync(c => c.ParentId ==  CatregoryId);
         }
     }
 }

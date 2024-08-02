@@ -27,7 +27,7 @@ namespace PharmaShop.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<AuthResponseModel> AuthenticateAsync(LoginRequestModel user)
+        public async Task<AuthResponse> AuthenticateAsync(LoginRequest user)
         {
             if (string.IsNullOrEmpty(user.Username) || string.IsNullOrEmpty(user.Password))
             {
@@ -46,7 +46,7 @@ namespace PharmaShop.Application.Services
                 throw new ApplicationException(message: "Invalid username or password.");
             }
 
-            return new AuthResponseModel
+            return new AuthResponse
             {
                 Token = await GenerateJwtToken(loginUser)
             };

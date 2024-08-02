@@ -1,8 +1,8 @@
 ﻿namespace PharmaShop.Application.Models.Response
 {
-    public class CategoryTableResponseModel
+    public class CategoryTableResponse
     {
-        public CategoryTableResponseModel()
+        public CategoryTableResponse()
         {
             Id = -1;
             Name = "";

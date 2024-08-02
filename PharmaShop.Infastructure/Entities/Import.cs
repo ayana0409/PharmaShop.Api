@@ -11,7 +11,7 @@ namespace PharmaShop.Infastructure.Entities
         public DateTime ImportDate { get; set; }
         public double TotalCost { get; set; }
         [Required]
-        public string? SupplierId { get; set; }
+        public string SupplierId { get; set; } = string.Empty;
         [ForeignKey(nameof(SupplierId))]
         public ApplicationUser? Supplier { get; set; }
         public StatusProcessing Status { get; set; } = StatusProcessing.New;

@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace PharmaShop.Infastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initialDb : Migration
+    public partial class initalDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

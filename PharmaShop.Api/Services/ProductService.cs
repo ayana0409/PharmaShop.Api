@@ -18,16 +18,16 @@ namespace PharmaShop.Api.Services
             _cloudinaryService = cloudinaryService;
         }
 
-        public async Task<TableResponseModel<ProductResponseModel>> GetPanigation(TableRequestModel request)
+        public async Task<TableResponse<ProductResponse>> GetPanigation(TableRequest request)
         {
             var (result, total) = await _unitOfWork.ProductRepository
                 .GetProductPanigationAsync(request.PageIndex, request.PageSize, request.Keyword ?? "");
-            List<ProductResponseModel> datas = [];
+            List<ProductResponse> datas = [];
             var categories = await _unitOfWork.Table<Category>().ToListAsync();
 
             foreach (var item in result)
             {
-                datas.Add(new ProductResponseModel
+                datas.Add(new ProductResponse
                 {
                     Id = item.Id,
                     Name = item.Name ?? "",
@@ -39,7 +39,7 @@ namespace PharmaShop.Api.Services
                 });
             }
 
-            return new TableResponseModel<ProductResponseModel>
+            return new TableResponse<ProductResponse>
             {
                 PageSize = request.PageSize,
                 Datas = datas,
@@ -47,7 +47,7 @@ namespace PharmaShop.Api.Services
             };
         }
 
-        public async Task Add(ProductRequestModel data, List<IFormFile> images)
+        public async Task Add(ProductRequest data, List<IFormFile> images)
         {
             Product product = new()
             {
@@ -105,7 +105,7 @@ namespace PharmaShop.Api.Services
             }
         }
 
-        public async Task Update(int id, ProductRequestModel data, List<IFormFile> images, List<string> imageUrl)
+        public async Task Update(int id, ProductRequest data, List<IFormFile> images, List<string> imageUrl)
         {
             try
             {
@@ -150,10 +150,7 @@ namespace PharmaShop.Api.Services
                                                         };
                                                     }).ToList();
 
-                foreach(var item in insertDetailList)
-                {
-                    await _unitOfWork.ProductDetailRepository.AddAsync(item);
-                }
+                await _unitOfWork.Table<ProductDetail>().AddRangeAsync(insertDetailList);
 
                 foreach (var item in details)
                 {
@@ -170,29 +167,20 @@ namespace PharmaShop.Api.Services
                     }
                 }
 
-                List<string> containImageUrl = imageUrl.Where(i => i.Contains("http://res.cloudinary.com/")).ToList();
-
                 var productImages = await _unitOfWork.ImageRepository.GetByProductIdAsync(id);
 
-                foreach (var image in productImages)
-                {
-                    var result = containImageUrl.FirstOrDefault(ci => ci == image.Path);
-                    if (result == null) 
-                    {
-                        var uri = new Uri(image.Path ?? "");
-                        var segments = uri.Segments;
-                        if (segments.Length >= 3)
-                        {
-                            var publicIdWithFormat = segments[^1];
-                            var publicId = publicIdWithFormat.Substring(0, publicIdWithFormat.LastIndexOf('.'));
-                             
-                            await _cloudinaryService.DeleteAsync(publicId);
+                var validImageUrls = imageUrl.Where(i => i.Contains("http://res.cloudinary.com/")).ToList();
 
-                            _unitOfWork.ImageRepository.Remove(image);
-                        }
-                    }
-                }
-                
+                var deleteTasks = productImages
+                                    .Where(image => image.Path != null && !validImageUrls.Contains(image.Path))
+                                    .Select(image => {
+                                        _unitOfWork.ImageRepository.Remove(image);
+                                        return _cloudinaryService.DeleteAsync(image.Path);
+                                    })
+                                    .ToArray();
+
+                await Task.WhenAll(deleteTasks);
+
                 var insertImage = images.Where(i => i.FileName != "blob").ToList();
 
                 await AddImageList(id, insertImage);
@@ -215,20 +203,14 @@ namespace PharmaShop.Api.Services
 
                 var productImages = await _unitOfWork.ImageRepository.GetByProductIdAsync(productId);
 
-                foreach (var image in productImages)
-                {
-                    var uri = new Uri(image.Path ?? "");
-                    var segments = uri.Segments;
-                    if (segments.Length >= 3)
-                    {
-                        var publicIdWithFormat = segments[^1];
-                        var publicId = publicIdWithFormat.Substring(0, publicIdWithFormat.LastIndexOf('.'));
+                var deleteTasks = productImages
+                                    .Select(image => {
+                                        _unitOfWork.ImageRepository.Remove(image);
+                                        return _cloudinaryService.DeleteAsync(image.Path);
+                                    })
+                                    .ToArray();
 
-                        await _cloudinaryService.DeleteAsync(publicId);
-
-                        _unitOfWork.ImageRepository.Remove(image);
-                    }
-                }
+                await Task.WhenAll(deleteTasks);
 
                 await _unitOfWork.ProductRepository.Remove(productId);
 
@@ -263,7 +245,7 @@ namespace PharmaShop.Api.Services
 
             var listImages = _unitOfWork.Table<Image>().Where(d => d.ProductId == id);
 
-            List<string?> Images = listImages != null ? listImages.Select(d => d.Path).ToList() : [];
+            List<string> Images = listImages != null ? listImages.Select(d => d.Path).ToList() : [];
 
             return new ProductForUpdateResponse
             {

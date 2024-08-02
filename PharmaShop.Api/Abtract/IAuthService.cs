@@ -5,6 +5,6 @@ namespace PharmaShop.Application.Abtract
 {
     public interface IAuthService
     {
-        Task<AuthResponseModel> AuthenticateAsync(LoginRequestModel user);
+        Task<AuthResponse> AuthenticateAsync(LoginRequest user);
     }
 }
