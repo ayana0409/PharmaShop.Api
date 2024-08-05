@@ -1,5 +1,6 @@
 using PharmaShop.Application.Setting;
-using PharmaShop.Infastructure;
+using PharmaShop.Application;
+using PharmaShop.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddAuthorization();
 builder.Services.RegisterDb(builder.Configuration);
 
 builder.Services.AddDependencyInjection();
+builder.Services.AddAppDependencyInjection();
 
 builder.Services.AddSwagger();
 

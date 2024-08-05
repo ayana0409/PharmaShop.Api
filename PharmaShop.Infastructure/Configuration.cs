@@ -3,11 +3,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PharmaShop.Infastructure.Data;
-using PharmaShop.Infastructure.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Principal;
+using System.Text;
+using PharmaShop.Application.Data;
+using PharmaShop.Domain.Entities;
+using CloudinaryDotNet;
 using PharmaShop.Application.Models;
-using PharmaShop.Infastructure.Entities;
-namespace PharmaShop.Infastructure
+using PharmaShop.Domain.Abtract;
+using PharmaShop.Application.Repositorys;
+
+namespace PharmaShop.Application
 {
     public static class Configuration
     {
@@ -26,6 +33,69 @@ namespace PharmaShop.Infastructure
 
                 }
             }
+        }
+
+        public static void RegisterDb(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("PharmaShopDatabase")
+                    ?? throw new InvalidOperationException("Connection not found.");
+
+            services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(connectionString));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                    .AddEntityFrameworkStores<ApplicationDbContext>()
+                    .AddSignInManager<SignInManager<ApplicationUser>>()
+                    .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(option =>
+            {
+                option.Lockout.AllowedForNewUsers = true;
+                option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+                option.Lockout.MaxFailedAccessAttempts = 3;
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = configuration["JWT:ValidAudience"],
+                    ValidIssuer = configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"] ?? throw new ApplicationException(message: "No JWT:Secret")))
+                };
+            });
+
+            services.AddSingleton(s =>
+            {
+                var cloudName = configuration["Cloudinary:CloudName"];
+                var apiKey = configuration["Cloudinary:ApiKey"];
+                var apiSecret = configuration["Cloudinary:ApiSecret"];
+
+                return new Cloudinary(new Account(cloudName, apiKey, apiSecret));
+            });
+
+            services.AddAuthorization();
+        }
+        public static void AddDependencyInjection(this IServiceCollection services)
+        {
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IProductDetailRepository, ProductDetailRepository>();
+            services.AddTransient<IImageRepository, ImageRepository>();
+            services.AddTransient<IImportRepository, ImportRepository>();
+            services.AddTransient<IImportDetailRepository, ImportDetailRepository>();
+            services.AddTransient<ICartItemRepository, CartItemRepository>();
         }
 
         public static async Task SeedData(this WebApplication webApplication, IConfiguration configuration)

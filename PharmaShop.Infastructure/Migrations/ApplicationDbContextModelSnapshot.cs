@@ -3,11 +3,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PharmaShop.Infastructure.Data;
+using PharmaShop.Application.Data;
 
 #nullable disable
 
-namespace PharmaShop.Infastructure.Migrations
+namespace PharmaShop.Application.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot

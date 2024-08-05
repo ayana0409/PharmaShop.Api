@@ -4,7 +4,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace PharmaShop.Infastructure.Migrations
+namespace PharmaShop.Application.Migrations
 {
     /// <inheritdoc />
     public partial class addCartTable : Migration

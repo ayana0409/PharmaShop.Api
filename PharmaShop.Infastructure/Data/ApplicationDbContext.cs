@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PharmaShop.Infastructure.Entities;
-using PharmaShop.Infastructure.Models;
-using System.Configuration;
-using System.Drawing;
-using System.Reflection.Emit;
+using PharmaShop.Domain.Entities;
 
-namespace PharmaShop.Infastructure.Data
+namespace PharmaShop.Application.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
-using PharmaShop.Application.Abtract;
-using PharmaShop.Infastructure.Entities;
+using PharmaShop.Domain.Entities;
+using PharmaShop.Domain.Abtract;
 
 namespace PharmaShop.Application.Controllers
 {

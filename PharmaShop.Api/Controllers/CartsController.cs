@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
-using PharmaShop.Api.Abtract;
+using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
 using System.Security.Claims;
 
-namespace PharmaShop.Api.Controllers
+namespace PharmaShop.Application.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]

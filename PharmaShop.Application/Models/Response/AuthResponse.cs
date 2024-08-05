@@ -1,6 +1,4 @@
-﻿using PharmaShop.Infastructure.Enum;
-
-namespace PharmaShop.Application.Models.Response
+﻿namespace PharmaShop.Application.Models.Response
 {
     public class AuthResponse
     {

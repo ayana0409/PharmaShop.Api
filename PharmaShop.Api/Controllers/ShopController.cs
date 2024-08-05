@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PharmaShop.Api.Services;
+using PharmaShop.Application.Services;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
 
-namespace PharmaShop.Api.Controllers
+namespace PharmaShop.Application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

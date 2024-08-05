@@ -2,7 +2,7 @@
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
 using Newtonsoft.Json;
-using PharmaShop.Api.Abtract;
+using PharmaShop.Application.Abtract;
 using Microsoft.AspNetCore.Authorization;
 
 namespace PharmaShop.Application.Controllers

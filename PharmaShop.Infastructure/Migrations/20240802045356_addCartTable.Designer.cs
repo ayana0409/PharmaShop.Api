@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PharmaShop.Infastructure.Data;
+using PharmaShop.Application.Data;
 
 #nullable disable
 
-namespace PharmaShop.Infastructure.Migrations
+namespace PharmaShop.Application.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240802045356_addCartTable")]
