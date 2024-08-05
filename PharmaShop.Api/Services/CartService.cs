@@ -73,7 +73,6 @@ namespace PharmaShop.Api.Services
             }
         }
 
-
         public async Task AddItemAsync(CartItemRequest request, string username)
         {
             try
@@ -107,6 +106,56 @@ namespace PharmaShop.Api.Services
             catch (Exception ex)
             {
                 throw new Exception("An error occurred while adding item to cart.", ex);
+            }
+        }
+
+        public async Task UpdateCartItemAsync(int itemId, int quantity)
+        {
+            try
+            {
+                var existItem = await _unitOfWork.Table<CartItem>().FirstOrDefaultAsync(i => i.Id == itemId);
+
+                if (existItem == null)
+                {
+                    return;
+                }
+
+                if (quantity > 0)
+                {
+                    existItem.Quantity = quantity;
+                    _unitOfWork.Table<CartItem>().Update(existItem);
+                }
+                else
+                {
+                    _unitOfWork.Table<CartItem>().Remove(existItem);
+                }
+
+                await _unitOfWork.SaveChangeAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task DeleteCartItemAsync(int itemId)
+        {
+            try
+            {
+                var existItem = await _unitOfWork.Table<CartItem>().FirstOrDefaultAsync(i => i.Id == itemId);
+
+                if (existItem == null)
+                {
+                    return;
+                }
+
+                _unitOfWork.Table<CartItem>().Remove(existItem);
+
+                await _unitOfWork.SaveChangeAsync();
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
         private async Task<Cart> CreateCartAsync(string userId)

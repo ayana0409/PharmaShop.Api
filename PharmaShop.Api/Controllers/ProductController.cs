@@ -40,17 +40,19 @@ namespace PharmaShop.Application.Controllers
             }
         }
 
-        [HttpPost("getpanigation")]
-        public async Task<ActionResult<TableResponse<ProductResponse>>> GetPanigation([FromForm] string request)
+        [HttpPost("pagination")]
+        public async Task<ActionResult<TableResponse<ProductResponse>>> GetPanigation([FromBody] TableRequest request)
         {
-            var data = JsonConvert.DeserializeObject<TableRequest>(request);
 
-            if(data == null)
+            try
             {
-                return BadRequest();
+                var result = await _productService.GetPanigation(request);
+                return Ok(result);
             }
-
-            return Ok(await _productService.GetPanigation(data));
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("add")]
