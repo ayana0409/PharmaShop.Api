@@ -16,24 +16,24 @@ namespace PharmaShop.Api.Controllers
         {
             _shopService = shopService;
         }
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
-        [HttpGet("getnavbar")]
+        [HttpGet("navbar")]
         public async Task<IEnumerable<NavbarResponse>> GetNavbar()
         {
              return await _shopService.GetNavbar();
         }
 
-        [HttpPost("getproductpanigation")]
-        public async Task<TableResponse<ProductForSideResponse>> GetProductPanigation([FromForm] string request)
+        [HttpPost("products/panigation")]
+        public async Task<ActionResult<TableResponse<ProductForSideResponse>>> GetProductPanigation([FromBody] ProductForSideRequest request)
         {
-            var datas = JsonConvert.DeserializeObject<ProductForSideRequest>(request);
-
-            return datas == null ? throw new Exception("Request is null") : await _shopService.GetProductForSidePanigationAsync(datas);
+            try
+            {
+                var result = await _shopService.GetProductForSidePanigationAsync(request);
+                return Ok(result);
+            }
+            catch (Exception ex) {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
@@ -48,21 +48,6 @@ namespace PharmaShop.Api.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
