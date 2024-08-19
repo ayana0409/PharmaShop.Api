@@ -5,8 +5,9 @@ namespace PharmaShop.Application.Abtract
 {
     public interface ICartService
     {
-        Task AddItemAsync(CartItemRequest request, string username);
+        Task<bool> AddItemAsync(CartItemRequest request, string username);
         Task DeleteCartItemAsync(int itemId);
+        Task DeleteCartItemRangeAsync(List<int> listCartItemIds);
         Task<int> GetItemsCount(string username);
         Task<TableResponse<CartItemResponse>> GetListItemsPaginationAsync(string username, TableRequest request);
         Task UpdateCartItemAsync(int itemId, int quantity);

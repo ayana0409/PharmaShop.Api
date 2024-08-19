@@ -3,6 +3,6 @@
     public enum PaymentMethod
     {
         COD = 1,
-        Paypal = 2
+        PayPal = 2
     }
 }

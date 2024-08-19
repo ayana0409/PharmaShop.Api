@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace PharmaShop.Application.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin")]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
@@ -17,13 +17,6 @@ namespace PharmaShop.Application.Controllers
         public ProductController(IProductService productService)
         {
             _productService = productService;
-        }
-
-        // GET: api/<ProductController>
-        [HttpGet("getall")]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
         }
 
         [HttpGet("getforupdate")]
@@ -41,12 +34,12 @@ namespace PharmaShop.Application.Controllers
         }
 
         [HttpPost("pagination")]
-        public async Task<ActionResult<TableResponse<ProductResponse>>> GetPanigation([FromBody] TableRequest request)
+        public async Task<ActionResult<TableResponse<ProductResponse>>> GetPagigation([FromBody] TableRequest request)
         {
 
             try
             {
-                var result = await _productService.GetPanigation(request);
+                var result = await _productService.GetPagigation(request);
                 return Ok(result);
             }
             catch (Exception ex)

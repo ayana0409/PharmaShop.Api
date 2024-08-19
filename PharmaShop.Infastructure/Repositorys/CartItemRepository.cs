@@ -13,10 +13,9 @@ namespace PharmaShop.Application.Repositorys
 
         public async Task<(IEnumerable<CartItem>, int)> GetPanigationByCartIdAsync(int cartId, int pageIndex, int pageSize)
         {
-            var query = await base.GetAllAsync();
+            var query = await base.GetAllAsync(i => i.CartId == cartId);
 
             var products = query
-                .Where(i => i.CartId == cartId)
                 .Skip(pageIndex * pageSize)
                 .Take(pageSize)
                 .ToList();

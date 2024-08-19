@@ -11,9 +11,9 @@ namespace PharmaShop.Domain.Entities
         public PaymentMethod PaymentMethod { get; set; }
         public StatusProcessing Status { get; set; }
         [Required]
-        public string? CustomerId { get; set; }
-        [ForeignKey(nameof(CustomerId))]
-        public ApplicationUser? Customer { get; set; }
+        public int? UserAddressId { get; set; }
+        [ForeignKey(nameof(UserAddressId))]
+        public UserAddress? Address { get; set; }
         public ICollection<OrderDetail>? Details { get; set; }
     }
 }

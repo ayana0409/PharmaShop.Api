@@ -44,9 +44,9 @@ namespace PharmaShop.Application.Controllers
 
             try
             {
-                await _cartService.AddItemAsync(request, username);
+                var result = await _cartService.AddItemAsync(request, username);
 
-                return Created();
+                return Created("Add new item:", result);
             }
             catch (Exception)
             {

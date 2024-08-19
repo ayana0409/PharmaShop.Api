@@ -13,6 +13,7 @@ using CloudinaryDotNet;
 using PharmaShop.Application.Models;
 using PharmaShop.Domain.Abtract;
 using PharmaShop.Application.Repositorys;
+using PharmaShop.Infastructure.Repositorys;
 
 namespace PharmaShop.Application
 {
@@ -72,6 +73,16 @@ namespace PharmaShop.Application
                     ValidIssuer = configuration["JWT:ValidIssuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"] ?? throw new ApplicationException(message: "No JWT:Secret")))
                 };
+
+                options.MetadataAddress = "https://accounts.google.com/.well-known/openid-configuration";
+
+            }).AddGoogle(googleOptions =>
+            {
+                var clientID = configuration["GoogleAuthentication:ClientID"];
+                var clientSecret = configuration["GoogleAuthentication:ClientSecret"];
+
+                googleOptions.ClientId = clientID;
+                googleOptions.ClientSecret = clientSecret;
             });
 
             services.AddSingleton(s =>
@@ -96,6 +107,7 @@ namespace PharmaShop.Application
             services.AddTransient<IImportRepository, ImportRepository>();
             services.AddTransient<IImportDetailRepository, ImportDetailRepository>();
             services.AddTransient<ICartItemRepository, CartItemRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
         }
 
         public static async Task SeedData(this WebApplication webApplication, IConfiguration configuration)

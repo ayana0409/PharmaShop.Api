@@ -19,7 +19,7 @@ namespace PharmaShop.Application.Services
             _cloudinaryService = cloudinaryService;
         }
 
-        public async Task<TableResponse<ProductResponse>> GetPanigation(TableRequest request)
+        public async Task<TableResponse<ProductResponse>> GetPagigation(TableRequest request)
         {
             var (result, total) = await _unitOfWork.ProductRepository
                 .GetProductPanigationAsync(request.PageIndex, request.PageSize, request.Keyword ?? "");

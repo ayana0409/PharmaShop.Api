@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using PharmaShop.Domain.Abtract;
 using PharmaShop.Application.Data;
+using PharmaShop.Infastructure.Repositorys;
 
 namespace PharmaShop.Application.Repositorys
 {
@@ -16,6 +17,7 @@ namespace PharmaShop.Application.Repositorys
         private IImportRepository? _importRepository;
         private IImportDetailRepository? _importDetailRepository;
         private ICartItemRepository? _cartItemRepository;
+        private IOrderRepository? _orderRepository;
         public UnitOfWork(ApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
@@ -30,6 +32,7 @@ namespace PharmaShop.Application.Repositorys
         public IImportRepository ImportRepository => _importRepository ??= new ImportRepository(_applicationDbContext);
         public IImportDetailRepository ImportDetailRepository => _importDetailRepository ??= new ImportDetailRepository(_applicationDbContext);
         public ICartItemRepository CartItemRepository => _cartItemRepository ??= new CartItemRepository(_applicationDbContext);
+        public IOrderRepository OrderRepository => _orderRepository ??= new OrderRepository(_applicationDbContext);
         //
 
         public async Task BeginTransaction()

@@ -1,6 +1,5 @@
 using PharmaShop.Application.Setting;
 using PharmaShop.Application;
-using PharmaShop.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +50,7 @@ app.UseStaticFiles();
 //app.UseMiddleware<AuthenticationMiddleware>();
 
 app.UseCors("AllowSpecificOrigin");
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using PharmaShop.Domain.Entities;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Authentication;
 
 namespace PharmaShop.Application.Services
 {
@@ -27,7 +29,7 @@ namespace PharmaShop.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<AuthResponse> AuthenticateAsync(LoginRequest user)
+        public async Task<AuthResponse> AuthenticateAsync(Models.Request.LoginRequest user)
         {
             if (string.IsNullOrEmpty(user.Username) || string.IsNullOrEmpty(user.Password))
             {
@@ -51,6 +53,44 @@ namespace PharmaShop.Application.Services
                 Token = await GenerateJwtToken(loginUser)
             };
         }
+
+        public async Task<AuthResponse> ExternalLoginAsync(string email, string name)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ApplicationException("Email must not be empty.");
+            }
+
+            var loginUser = await _userManager.FindByEmailAsync(email);
+            if (loginUser == null)
+            {
+                var newUser = new ApplicationUser
+                {
+                    UserName = email,
+                    Email = email,
+                    FullName = name,
+                    TypeId = 1
+                };
+
+                var createResult = await _userManager.CreateAsync(newUser);
+                if (!createResult.Succeeded)
+                {
+                    throw new ApplicationException("User creation failed.");
+                }
+
+                loginUser = newUser;
+            }
+
+            var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(loginUser);
+            await _signInManager.Context.SignInAsync(IdentityConstants.ApplicationScheme, claimsPrincipal);
+
+            return new AuthResponse
+            {
+                Token = await GenerateJwtToken(loginUser)
+            };
+        }
+
+
 
         private async Task<string> GenerateJwtToken(ApplicationUser user)
         {

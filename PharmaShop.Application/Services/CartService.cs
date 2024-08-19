@@ -52,6 +52,7 @@ namespace PharmaShop.Application.Services
                         {
                             Id = item.Id,
                             ProductName = product.Name,
+                            ProductId = item.ProductId,
                             Price = product.BigUnitPrice,
                             Quantity = item.Quantity,
                             ImageUrl = product.Images?.FirstOrDefault()?.Path ?? ""
@@ -72,8 +73,9 @@ namespace PharmaShop.Application.Services
             }
         }
 
-        public async Task AddItemAsync(CartItemRequest request, string username)
+        public async Task<bool> AddItemAsync(CartItemRequest request, string username)
         {
+            bool isAddnew = false;
             try
             {
                 var user = await _userManager.FindByNameAsync(username) ?? throw new Exception("Invalid user");
@@ -92,6 +94,8 @@ namespace PharmaShop.Application.Services
                     };
 
                     await _unitOfWork.Table<CartItem>().AddAsync(newItem);
+
+                    isAddnew = true;
                 }
                 else
                 {
@@ -101,6 +105,8 @@ namespace PharmaShop.Application.Services
                 }
 
                 await _unitOfWork.SaveChangeAsync();
+
+                return isAddnew;
             }
             catch (Exception ex)
             {
@@ -149,6 +155,27 @@ namespace PharmaShop.Application.Services
                 }
 
                 _unitOfWork.Table<CartItem>().Remove(existItem);
+
+                await _unitOfWork.SaveChangeAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task DeleteCartItemRangeAsync(List<int> listCartItemIds)
+        {
+            try
+            {
+                var existItem = await _unitOfWork.Table<CartItem>().Where(i => listCartItemIds.Contains(i.Id)).ToListAsync();
+
+                if (existItem == null)
+                {
+                    return;
+                }
+
+                _unitOfWork.Table<CartItem>().RemoveRange(existItem);
 
                 await _unitOfWork.SaveChangeAsync();
             }
