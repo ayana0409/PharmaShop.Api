@@ -19,16 +19,16 @@ namespace PharmaShop.Application.Services
             _cloudinaryService = cloudinaryService;
         }
 
-        public async Task<TableResponse<ProductResponse>> GetPagigation(TableRequest request)
+        public async Task<TableResponse<ProductSummaryResponse>> GetPagigation(TableRequest request)
         {
             var (result, total) = await _unitOfWork.ProductRepository
                 .GetProductPanigationAsync(request.PageIndex, request.PageSize, request.Keyword ?? "");
-            List<ProductResponse> datas = [];
+            List<ProductSummaryResponse> datas = [];
             var categories = await _unitOfWork.Table<Category>().ToListAsync();
 
             foreach (var item in result)
             {
-                datas.Add(new ProductResponse
+                datas.Add(new ProductSummaryResponse
                 {
                     Id = item.Id,
                     Name = item.Name ?? "",
@@ -40,7 +40,7 @@ namespace PharmaShop.Application.Services
                 });
             }
 
-            return new TableResponse<ProductResponse>
+            return new TableResponse<ProductSummaryResponse>
             {
                 PageSize = request.PageSize,
                 Datas = datas,

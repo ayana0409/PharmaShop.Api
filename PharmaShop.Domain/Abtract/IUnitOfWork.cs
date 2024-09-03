@@ -12,6 +12,7 @@ namespace PharmaShop.Domain.Abtract
         IImportDetailRepository ImportDetailRepository { get; }
         ICartItemRepository CartItemRepository { get; }
         IOrderRepository OrderRepository { get; }
+        IAccountRepository AccountRepository { get; }
 
         Task BeginTransaction();
         Task CommitTransaction();

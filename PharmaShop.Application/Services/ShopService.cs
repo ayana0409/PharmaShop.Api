@@ -4,6 +4,7 @@ using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
 using PharmaShop.Domain.Entities;
 using PharmaShop.Domain.Abtract;
+using PharmaShop.Application.Abtract;
 
 namespace PharmaShop.Application.Services
 {

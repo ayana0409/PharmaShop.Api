@@ -1,29 +1,32 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using PharmaShop.Application.Abtract;
-using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using PharmaShop.Domain.Entities;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Authentication;
+using PharmaShop.Domain.Abtract;
+using Microsoft.EntityFrameworkCore;
 
 namespace PharmaShop.Application.Services
 {
     public class AuthService : IAuthService
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
 
         public AuthService(
+            IUnitOfWork unitOfWork,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration)
         {
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
@@ -61,15 +64,19 @@ namespace PharmaShop.Application.Services
                 throw new ApplicationException("Email must not be empty.");
             }
 
-            var loginUser = await _userManager.FindByEmailAsync(email);
+            var loginUser = await _userManager.FindByNameAsync(email);
             if (loginUser == null)
             {
+                int firstTypeId = _unitOfWork.Table<UserType>()
+                                                .OrderBy(t => t.Point)
+                                                .FirstOrDefaultAsync().Id;
                 var newUser = new ApplicationUser
                 {
                     UserName = email,
                     Email = email,
                     FullName = name,
-                    TypeId = 1
+                    TypeId = firstTypeId,
+                    IsActive = true,
                 };
 
                 var createResult = await _userManager.CreateAsync(newUser);

@@ -11,7 +11,6 @@ using System.Security.Claims;
 namespace PharmaShop.Application.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class CartsController : ControllerBase
     {
@@ -33,6 +32,7 @@ namespace PharmaShop.Application.Controllers
             return await _cartService.GetItemsCount(username);
         }
 
+        [Authorize]
         [HttpPost("items")]
         public async Task<ActionResult> AddItem([FromBody] CartItemRequest request)
         {
@@ -54,6 +54,7 @@ namespace PharmaShop.Application.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("pagination")]
         public async Task<ActionResult<TableResponse<CartItemResponse>>> GetItems([FromBody] TableRequest request)
         {
@@ -66,6 +67,7 @@ namespace PharmaShop.Application.Controllers
             return await _cartService.GetListItemsPaginationAsync(username, request);
         }
 
+        [Authorize]
         [HttpPut("items/{itemId}")]
         public async Task<ActionResult> UpdateCartItem(int itemId, [FromBody] CartItemUpdateRequest request)
         {
@@ -85,6 +87,7 @@ namespace PharmaShop.Application.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("items/{itemId}")]
         public async Task<IActionResult> DeleteCartItem(int itemId)
         {

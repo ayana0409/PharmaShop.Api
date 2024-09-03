@@ -20,6 +20,37 @@ namespace PharmaShop.Application.Services
             _unitOfWork = unitOfWork;
             _userManager = userManager;
         }
+        public async Task<OrderResponse> GetById(int orderId)
+        {
+            var order = await _unitOfWork.Table<Order>().Include(o => o.Details)
+                                                        .Include(o => o.Address)
+                                                        .FirstOrDefaultAsync(o => o.Id == orderId)
+                                                        ?? throw new KeyNotFoundException($"Invalid order {orderId}");
+
+            List<OrderDetailResponse> details = await _unitOfWork.Table<OrderDetail>()
+                                                                    .Where(d => d.OrderId == orderId)
+                                                                    .Include(d => d.Product)
+                                                                    .Select(d =>
+                                                                        new OrderDetailResponse
+                                                                        {
+                                                                            ProductId = d.ProductId,
+                                                                            ProductName = d.Product.Name,
+                                                                            Quantity = d.Quantity,
+                                                                            Price = d.Price,
+                                                                        }
+                                                                    ).ToListAsync();
+            return new OrderResponse
+            {
+                Id = orderId,
+                Details = details,
+                OrderDate = order.OrderDate,
+                TotalPrice = order.TotalPrice,
+                PaymentMethod = Enum.GetName(typeof(PaymentMethod), order.PaymentMethod) ?? "COD",
+                FullName = order.Address?.FullName ?? "Customer",
+                Phone = order.Address?.PhoneNumber ?? "",
+                TotalItems = details.Count
+            };
+        }
 
         public async Task<TableResponse<OrderResponse>> GetOrdersByUsernamePaginationAsync(TableRequest request, string? username = null)
         {

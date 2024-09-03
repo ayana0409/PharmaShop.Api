@@ -34,7 +34,7 @@ namespace PharmaShop.Application.Controllers
         }
 
         [HttpPost("pagination")]
-        public async Task<ActionResult<TableResponse<ProductResponse>>> GetPagigation([FromBody] TableRequest request)
+        public async Task<ActionResult<TableResponse<ProductSummaryResponse>>> GetPagigation([FromBody] TableRequest request)
         {
 
             try

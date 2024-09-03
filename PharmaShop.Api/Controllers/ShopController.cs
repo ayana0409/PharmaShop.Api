@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using PharmaShop.Application.Services;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
+using PharmaShop.Application.Abtract;
 
 namespace PharmaShop.Application.Controllers
 {

@@ -4,7 +4,6 @@ using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Services;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
-using PharmaShop.Application.Services;
 using System.Security.Claims;
 using PharmaShop.Domain.Entities;
 
@@ -37,7 +36,7 @@ namespace PharmaShop.Application.Controllers
         }
 
         [HttpPost("getpanigation")]
-        public async Task<ActionResult<TableResponse<ProductResponse>>> GetPanigation([FromForm] string request)
+        public async Task<ActionResult<TableResponse<ProductSummaryResponse>>> GetPanigation([FromForm] string request)
         {
             var data = JsonConvert.DeserializeObject<TableRequest>(request);
 

@@ -10,6 +10,7 @@ namespace PharmaShop.Application.Repositorys
     {
         private readonly ApplicationDbContext _applicationDbContext;
         private IDbContextTransaction _dbContextTransaction;
+        private IAccountRepository? _accountRepository;
         private ICategoryRepository? _categoryRepository;
         private IProductRepository? _productRepository;
         private IProductDetailRepository? _productDetailRepository;
@@ -25,6 +26,7 @@ namespace PharmaShop.Application.Repositorys
         public DbSet<T> Table<T>() where T : class => _applicationDbContext.Set<T>();
 
         // Repository
+        public IAccountRepository AccountRepository => _accountRepository ??= new AccountRepository(_applicationDbContext);
         public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_applicationDbContext);
         public IProductRepository ProductRepository => _productRepository ??= new ProductRepository(_applicationDbContext);
         public IProductDetailRepository ProductDetailRepository => _productDetailRepository ??= new ProductDetailRepository(_applicationDbContext);

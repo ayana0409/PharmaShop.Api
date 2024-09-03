@@ -1,7 +1,7 @@
 ﻿using PharmaShop.Application.Models.Response;
 using PharmaShop.Domain.Entities;
 
-namespace PharmaShop.Application.Services
+namespace PharmaShop.Application.Abtract
 {
     public interface IUserService
     {

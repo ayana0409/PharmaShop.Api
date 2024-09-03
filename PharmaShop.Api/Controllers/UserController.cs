@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
-using PharmaShop.Application.Services;
 using System.Security.Claims;
 
 namespace PharmaShop.Application.Controllers
@@ -49,7 +48,6 @@ namespace PharmaShop.Application.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
         [HttpGet("address")]
@@ -65,12 +63,12 @@ namespace PharmaShop.Application.Controllers
                 }
 
                 var result = await _userService.GetAddressByUsernameAsync(username);
-                
+
                 return Ok(result);
             }
-            catch (Exception ex) 
-            { 
-                return BadRequest(ex.Message); 
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
         [HttpDelete("address/{addressId}")]
@@ -86,6 +84,25 @@ namespace PharmaShop.Application.Controllers
                 }
 
                 return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("orders/{id}")]
+        public async Task<ActionResult<OrderResponse>> GetOrder(int id)
+        {
+            try
+            {
+                OrderResponse order = await _orderService.GetById(id);
+
+                return Ok(order);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

@@ -9,7 +9,7 @@ namespace PharmaShop.Application.Abtract
         Task Add(ProductRequest data, List<IFormFile> images);
         Task Delete(int productId);
         Task<ProductForUpdateResponse> GetForUpdate(int id);
-        Task<TableResponse<ProductResponse>> GetPagigation(TableRequest request);
+        Task<TableResponse<ProductSummaryResponse>> GetPagigation(TableRequest request);
         Task Update(int id, ProductRequest data, List<IFormFile> images, List<string> imageUrl);
     }
 }

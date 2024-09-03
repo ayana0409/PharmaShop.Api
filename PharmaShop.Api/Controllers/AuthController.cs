@@ -41,7 +41,7 @@ namespace PharmaShop.Application.Controllers
             }
             catch (ApplicationException ex)
             {
-                return Unauthorized(ex.Message);
+                return NotFound(ex.Message);
             }
         }
 
@@ -51,7 +51,7 @@ namespace PharmaShop.Application.Controllers
             var payload = await VerifyGoogleTokenAsync(request.TokenId);
             if (payload == null)
             {
-                return Unauthorized("Invalid Google token.");
+                return NotFound("Invalid Google token.");
             }
 
             var email = payload.Email;

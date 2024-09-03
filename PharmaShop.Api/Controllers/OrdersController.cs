@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1.Ocsp;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
-using PharmaShop.Application.Services;
 using PharmaShop.Domain.Enum;
 using System.Security.Claims;
 
@@ -21,12 +18,33 @@ namespace PharmaShop.Api.Controllers
         private readonly ICartService _cartService;
         private readonly IPayPalService _payPalService;
 
-        public OrdersController(IUserService userService, IOrderService orderService, ICartService cartService, IPayPalService payPalService)
+        public OrdersController(IUserService userService,
+                                IOrderService orderService,
+                                ICartService cartService,
+                                IPayPalService payPalService)
         {
             _userService = userService;
             _orderService = orderService;
             _cartService = cartService;
             _payPalService = payPalService;
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<OrderResponse>> Get(int id)
+        {
+            try
+            {
+                OrderResponse order = await _orderService.GetById(id);
+
+                return Ok(order);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]

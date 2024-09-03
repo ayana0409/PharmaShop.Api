@@ -16,9 +16,9 @@ namespace PharmaShop.Application.Services
         }
         private APIContext GetAPIContext()
         {
-            string mode = _configuration["Paypal:Mode"] ?? throw new ApplicationException("Invalid PayPal mode");
-            string clientId = _configuration["Paypal:ClientID"] ?? throw new ApplicationException("Invalid PayPal ClientID");
-            string clientSecret = _configuration["Paypal:SecretKey"] ?? throw new ApplicationException("Invalid PayPal SecretKey");
+            string mode = _configuration["PayPal:Mode"] ?? throw new ApplicationException("Invalid PayPal mode");
+            string clientId = _configuration["PayPal:ClientID"] ?? throw new ApplicationException("Invalid PayPal ClientID");
+            string clientSecret = _configuration["PayPal:SecretKey"] ?? throw new ApplicationException("Invalid PayPal SecretKey");
             var config = new Dictionary<string, string>
             {
                 { "mode", mode },

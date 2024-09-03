@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Principal;
 using System.Text;
 using PharmaShop.Application.Data;
 using PharmaShop.Domain.Entities;
@@ -31,7 +30,7 @@ namespace PharmaShop.Application
                 }
                 catch (Exception ex)
                 {
-
+                    throw new Exception(ex.Message);
                 }
             }
         }
@@ -78,8 +77,8 @@ namespace PharmaShop.Application
 
             }).AddGoogle(googleOptions =>
             {
-                var clientID = configuration["GoogleAuthentication:ClientID"];
-                var clientSecret = configuration["GoogleAuthentication:ClientSecret"];
+                var clientID = configuration["GoogleAuthentication:ClientID"] ?? throw new ApplicationException("Invalid Google ClientID");
+                var clientSecret = configuration["GoogleAuthentication:ClientSecret"] ?? throw new ApplicationException("Invalid Google ClientSecret");
 
                 googleOptions.ClientId = clientID;
                 googleOptions.ClientSecret = clientSecret;
@@ -100,6 +99,7 @@ namespace PharmaShop.Application
         {
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
+            services.AddTransient<IAccountRepository, AccountRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IProductDetailRepository, ProductDetailRepository>();
