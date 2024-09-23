@@ -1,4 +1,4 @@
-﻿namespace PharmaShop.Application.Models.Response
+﻿namespace PharmaShop.Application.Models.Response.Product
 {
     public class ProductDetailForSideResponse
     {

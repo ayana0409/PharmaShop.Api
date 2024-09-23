@@ -1,4 +1,6 @@
-﻿namespace PharmaShop.Application.Models.Response
+﻿using PharmaShop.Application.Models.Response.Product;
+
+namespace PharmaShop.Application.Models.Response
 {
     public class ProductForDetailsResponse
     {

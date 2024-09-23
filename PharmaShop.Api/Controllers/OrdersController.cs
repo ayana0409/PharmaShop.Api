@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Models.Request;
-using PharmaShop.Application.Models.Response;
+using PharmaShop.Application.Models.Response.Order;
 using PharmaShop.Domain.Enum;
 using System.Security.Claims;
 
@@ -91,10 +91,8 @@ namespace PharmaShop.Api.Controllers
                     await _orderService.UpdateStatusAsync(id, (StatusProcessing)request.Status);
                     return NoContent();
                 }
-                else
-                {
-                    return BadRequest("Invalid status value.");
-                }
+
+                return BadRequest("Invalid status value.");
             }
             catch (KeyNotFoundException)
             {

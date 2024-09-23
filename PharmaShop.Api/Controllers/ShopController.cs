@@ -23,12 +23,33 @@ namespace PharmaShop.Application.Controllers
              return await _shopService.GetNavbar();
         }
 
-        [HttpPost("products/panigation")]
-        public async Task<ActionResult<TableResponse<ProductForSideResponse>>> GetProductPanigation([FromBody] ProductForSideRequest request)
+        [HttpGet("homeProduct")]
+        public async Task<ActionResult<IEnumerable<HomeProductResponse>>> GetHomeProduct()
         {
             try
             {
-                var result = await _shopService.GetProductForSidePanigationAsync(request);
+                var result = await _shopService.GetHomeProductListAsync();
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("products")]
+        public async Task<ActionResult<TableResponse<ProductForSideResponse>>> GetProductPanigation([FromQuery] int categoryId = 0, [FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 5, [FromQuery] string keyword = "")
+        {
+            try
+            {
+                var result = await _shopService.GetProductForSidePanigationAsync(new ProductForSideRequest
+                {
+                    PageIndex = pageIndex,
+                    PageSize = pageSize,
+                    Keyword = keyword,
+                    CategoryId = categoryId
+                });
                 return Ok(result);
             }
             catch (Exception ex) {

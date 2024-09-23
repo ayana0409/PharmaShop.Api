@@ -1,4 +1,4 @@
-﻿namespace PharmaShop.Application.Models.Response
+﻿namespace PharmaShop.Application.Models.Response.Order
 {
     public class OrderDetailResponse
     {

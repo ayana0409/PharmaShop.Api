@@ -2,7 +2,7 @@
 
 namespace PharmaShop.Application.Models.Response
 {
-    public class ProductForUpdateResponse
+    public class ProductResponse
     {
         public string? Name { get; set; }
         public string? Brand { get; set; }

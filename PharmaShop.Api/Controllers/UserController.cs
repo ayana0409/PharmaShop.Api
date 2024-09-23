@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
+using PharmaShop.Application.Models.Response.Order;
 using System.Security.Claims;
 
 namespace PharmaShop.Application.Controllers
@@ -51,7 +52,7 @@ namespace PharmaShop.Application.Controllers
         }
 
         [HttpGet("address")]
-        public async Task<ActionResult<UserAddressResponse>> UserAddress()
+        public async Task<ActionResult<UserAddressResponse>> GetUserAddress()
         {
             try
             {

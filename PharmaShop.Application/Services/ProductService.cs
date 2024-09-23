@@ -5,6 +5,7 @@ using PharmaShop.Application.Models.Response;
 using PharmaShop.Domain.Entities;
 using PharmaShop.Domain.Abtract;
 using Microsoft.AspNetCore.Http;
+using PharmaShop.Application.Models.Response.Product;
 
 namespace PharmaShop.Application.Services
 {
@@ -19,16 +20,16 @@ namespace PharmaShop.Application.Services
             _cloudinaryService = cloudinaryService;
         }
 
-        public async Task<TableResponse<ProductSummaryResponse>> GetPagigation(TableRequest request)
+        public async Task<TableResponse<ProductSummary>> GetPagigation(TableRequest request)
         {
             var (result, total) = await _unitOfWork.ProductRepository
                 .GetProductPanigationAsync(request.PageIndex, request.PageSize, request.Keyword ?? "");
-            List<ProductSummaryResponse> datas = [];
+            List<ProductSummary> datas = [];
             var categories = await _unitOfWork.Table<Category>().ToListAsync();
 
             foreach (var item in result)
             {
-                datas.Add(new ProductSummaryResponse
+                datas.Add(new ProductSummary
                 {
                     Id = item.Id,
                     Name = item.Name ?? "",
@@ -40,7 +41,7 @@ namespace PharmaShop.Application.Services
                 });
             }
 
-            return new TableResponse<ProductSummaryResponse>
+            return new TableResponse<ProductSummary>
             {
                 PageSize = request.PageSize,
                 Datas = datas,
@@ -225,7 +226,7 @@ namespace PharmaShop.Application.Services
             }
         }
 
-        public async Task<ProductForUpdateResponse> GetForUpdate(int id)
+        public async Task<ProductResponse> GetForUpdate(int id)
         {
             var product = await _unitOfWork.ProductRepository.GetSigleAsync(id);
 
@@ -248,7 +249,7 @@ namespace PharmaShop.Application.Services
 
             List<string> Images = listImages != null ? listImages.Select(d => d.Path).ToList() : [];
 
-            return new ProductForUpdateResponse
+            return new ProductResponse
             {
                 Name = product.Name,
                 Brand = product.Brand,

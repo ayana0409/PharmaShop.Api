@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Request.Account;
-using PharmaShop.Application.Models.Response;
 using PharmaShop.Application.Models.Response.Accounts;
+using PharmaShop.Application.Models.Response.Order;
 
 namespace PharmaShop.Api.Controllers
 {

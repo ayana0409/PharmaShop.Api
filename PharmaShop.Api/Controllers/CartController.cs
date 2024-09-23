@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
 using PharmaShop.Application.Abtract;
 using PharmaShop.Application.Models.Request;
 using PharmaShop.Application.Models.Response;
@@ -12,11 +9,11 @@ namespace PharmaShop.Application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CartsController : ControllerBase
+    public class CartController : ControllerBase
     {
         private readonly ICartService _cartService;
 
-        public CartsController(ICartService cartService)
+        public CartController(ICartService cartService)
         {
             _cartService = cartService;
         }
@@ -55,8 +52,8 @@ namespace PharmaShop.Application.Controllers
         }
 
         [Authorize]
-        [HttpPost("pagination")]
-        public async Task<ActionResult<TableResponse<CartItemResponse>>> GetItems([FromBody] TableRequest request)
+        [HttpGet]
+        public async Task<ActionResult<TableResponse<CartItemResponse>>> GetItems([FromQuery] int pageIndex = 0, [FromQuery] int pageSize = 5, [FromQuery] string keyword = "")
         {
             var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (username == null)
@@ -64,7 +61,12 @@ namespace PharmaShop.Application.Controllers
                 return Unauthorized();
             }
 
-            return await _cartService.GetListItemsPaginationAsync(username, request);
+            return await _cartService.GetListItemsPaginationAsync(username, new TableRequest
+            {
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                Keyword = keyword
+            });
         }
 
         [Authorize]

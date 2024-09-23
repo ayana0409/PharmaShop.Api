@@ -1,16 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PharmaShop.Application.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using PharmaShop.Application.Models;
-using PharmaShop.Application.Abtract;
-using PharmaShop.Application.Services;
-using Microsoft.OpenApi.Models;
-using PharmaShop.Application.Repositorys;
-using CloudinaryDotNet;
-using PharmaShop.Domain.Abtract;
+﻿using Microsoft.OpenApi.Models;
+using System.Reflection;
 namespace PharmaShop.Application.Setting
 {
     public static class Configuration
@@ -47,7 +36,10 @@ namespace PharmaShop.Application.Setting
                     }
                 });
 
-                
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
+
             });
         }
     }

@@ -5,6 +5,7 @@ using PharmaShop.Application.Models.Response;
 using PharmaShop.Domain.Entities;
 using PharmaShop.Domain.Abtract;
 using PharmaShop.Application.Abtract;
+using PharmaShop.Application.Models.Response.Product;
 
 namespace PharmaShop.Application.Services
 {
@@ -21,15 +22,16 @@ namespace PharmaShop.Application.Services
         {
             var categories = await _unitOfWork.Table<Category>()
                                               .Include(c => c.Categories)
+                                              .Where(c => c.IsAcvive == true)
                                               .ToListAsync();
 
             var navbar = categories.Where(c => c.ParentId == null).ToList();
 
-            List<NavbarResponse> result = new List<NavbarResponse>();
+            List<NavbarResponse> result = [];
 
             foreach (var category in navbar)
             {
-                var children = category.Categories;
+                var children = category.Categories?.Where(c => c.IsAcvive == true);
 
                 if (children != null)
                 {
@@ -38,6 +40,51 @@ namespace PharmaShop.Application.Services
                         Id = category.Id,
                         Title = category.Name ?? "Category",
                         Items = children.Select(c => new NavbarChild { Label = c.Name ?? "Child name", Href = "products/category/" +c.Id.ToString() }).ToList(),
+                    });
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<HomeProductResponse>> GetHomeProductListAsync()
+        {
+            var categories = await _unitOfWork.Table<Category>()
+                                              .Include(c => c.Categories)
+                                              .Where(c => c.IsAcvive == true && c.ParentId == null)
+                                              .Take(4)
+                                              .ToListAsync();
+
+            var products = await _unitOfWork.Table<Product>()
+                                            .Include(p => p.Images)
+                                            .Where(p => p.IsActive == true)
+                                            .ToListAsync();
+
+            List<HomeProductResponse> result = [];
+
+            foreach (var category in categories)
+            {
+                var childCategory = GetChildCategoryIdsByParentId(category.Id);
+                var listProduct = products?.Where(p => childCategory.Contains(p.CategoryId))
+                                            .Take(4).ToList();
+
+                if (listProduct != null && listProduct.Count > 0)
+                {
+                    result.Add(new HomeProductResponse
+                    {
+                        CategoryName = category.Name,
+                        Products = listProduct.Select(item => new ProductForSideResponse
+                        {
+                            Id = item.Id,
+                            Name = item.Name ?? "",
+                            Description = item.Description ?? "",
+                            Packaging = item.Packaging ?? "",
+                            Quantity = item.ProductInventorys != null ? item.ProductInventorys.Sum(i => i.BigUnitQuantity) : 0,
+                            RequirePrescription = item.RequirePrescription,
+                            Price = item.BigUnitPrice,
+                            ImagesUrl = item.Images != null ? item.Images.Select(i => i.Path).ToList() : [],
+                            IsActive = item.IsActive,
+                        })
                     });
                 }
             }
@@ -78,12 +125,8 @@ namespace PharmaShop.Application.Services
 
         public async Task<ProductForDetailsResponse> GetProductForSideById(int id)
         {
-            var product = await _unitOfWork.ProductRepository.GetProductForSideByIdAsync(id);
-
-            if (product == null)
-            {
-                throw new Exception("Invalid product");
-            }
+            var product = await _unitOfWork.ProductRepository.GetProductForSideByIdAsync(id)
+                                    ?? throw new Exception("Invalid product");
 
             var images = product.Images?.Select(product => product.Path).ToList() ?? [];
             var details = product.Details?.Select(p => new ProductDetailForSideResponse

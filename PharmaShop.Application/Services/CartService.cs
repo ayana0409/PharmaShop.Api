@@ -90,7 +90,7 @@ namespace PharmaShop.Application.Services
                     {
                         CartId = cart.Id,
                         ProductId = request.ProductId,
-                        Quantity = request.Quantity
+                        Quantity = request.Quantity,
                     };
 
                     await _unitOfWork.Table<CartItem>().AddAsync(newItem);

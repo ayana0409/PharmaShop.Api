@@ -14,6 +14,7 @@ namespace PharmaShop.Application
 
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IImportService, ImportService>();
