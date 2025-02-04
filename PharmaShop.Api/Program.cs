@@ -1,4 +1,4 @@
-using PharmaShop.Application.Setting;
+﻿using PharmaShop.Application.Setting;
 using PharmaShop.Application;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,14 +21,18 @@ builder.Services.AddSwagger();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin", 
+    options.AddPolicy("AllowSpecificOrigin",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000")
+            //builder.AllowAnyOrigin()
+            //       .AllowAnyMethod()
+            //       .AllowAnyHeader();
+            builder.WithOrigins("http://localhost:3000", "http://26.139.159.129", "http://26.139.159.129:3000", "http://localhost:3001")
                    .AllowAnyMethod()
                    .AllowAnyHeader()
                    .AllowCredentials();
-        });
+        }
+    );
 });
 
 var app = builder.Build();
@@ -43,11 +47,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
 app.UseCors("AllowSpecificOrigin");
+
 app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
