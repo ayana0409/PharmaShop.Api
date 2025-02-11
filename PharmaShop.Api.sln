@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaShop.Infastructure", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaShop.Application", "PharmaShop.Application\PharmaShop.Application.csproj", "{46E93A6A-0517-4177-86C9-F500DD9D5B36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmaShop.Domain", "PharmaShop.Domain\PharmaShop.Domain.csproj", "{4F51A198-FDEC-4FE6-A325-16559F45DFE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaShop.Domain", "PharmaShop.Domain\PharmaShop.Domain.csproj", "{4F51A198-FDEC-4FE6-A325-16559F45DFE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{D094F1B7-12EC-47BD-877F-0F26ED760839}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4F51A198-FDEC-4FE6-A325-16559F45DFE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F51A198-FDEC-4FE6-A325-16559F45DFE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F51A198-FDEC-4FE6-A325-16559F45DFE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D094F1B7-12EC-47BD-877F-0F26ED760839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D094F1B7-12EC-47BD-877F-0F26ED760839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D094F1B7-12EC-47BD-877F-0F26ED760839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D094F1B7-12EC-47BD-877F-0F26ED760839}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
