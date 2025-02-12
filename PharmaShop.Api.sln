@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaShop.Application", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PharmaShop.Domain", "PharmaShop.Domain\PharmaShop.Domain.csproj", "{4F51A198-FDEC-4FE6-A325-16559F45DFE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{D094F1B7-12EC-47BD-877F-0F26ED760839}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTest", "NUnit\NUnitTest.csproj", "{2781DCDB-8579-410E-AE35-5E207695375D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{4F51A198-FDEC-4FE6-A325-16559F45DFE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4F51A198-FDEC-4FE6-A325-16559F45DFE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4F51A198-FDEC-4FE6-A325-16559F45DFE1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D094F1B7-12EC-47BD-877F-0F26ED760839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D094F1B7-12EC-47BD-877F-0F26ED760839}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D094F1B7-12EC-47BD-877F-0F26ED760839}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D094F1B7-12EC-47BD-877F-0F26ED760839}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2781DCDB-8579-410E-AE35-5E207695375D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2781DCDB-8579-410E-AE35-5E207695375D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2781DCDB-8579-410E-AE35-5E207695375D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2781DCDB-8579-410E-AE35-5E207695375D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
