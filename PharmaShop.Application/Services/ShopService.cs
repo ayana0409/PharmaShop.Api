@@ -56,6 +56,7 @@ namespace PharmaShop.Application.Services
                                               .ToListAsync();
 
             var products = await _unitOfWork.Table<Product>()
+                                            .Include(p => p.ProductInventorys)
                                             .Include(p => p.Images)
                                             .Where(p => p.IsActive == true)
                                             .ToListAsync();

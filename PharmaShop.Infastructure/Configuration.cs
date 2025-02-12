@@ -14,6 +14,8 @@ using PharmaShop.Application.Models;
 using PharmaShop.Domain.Abtract;
 using PharmaShop.Application.Repositorys;
 using PharmaShop.Infastructure.Repositorys;
+using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
 namespace PharmaShop.Application
 {
@@ -63,6 +65,7 @@ namespace PharmaShop.Application
             })
             .AddJwtBearer(options =>
             {
+                options.UseSecurityTokenValidators = true;
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
@@ -71,11 +74,13 @@ namespace PharmaShop.Application
                     ValidateAudience = true,
                     ValidAudience = configuration["JWT:ValidAudience"],
                     ValidIssuer = configuration["JWT:ValidIssuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"])),
                 };
 
                 options.MetadataAddress = "https://accounts.google.com/.well-known/openid-configuration";
 
-            }).AddGoogle(googleOptions =>
+            })
+            .AddGoogle(googleOptions =>
             {
                 var clientID = configuration["GoogleAuthentication:ClientID"] ?? throw new ApplicationException("Invalid Google ClientID");
                 var clientSecret = configuration["GoogleAuthentication:ClientSecret"] ?? throw new ApplicationException("Invalid Google ClientSecret");
