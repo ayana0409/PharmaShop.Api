@@ -8,12 +8,6 @@ using PharmaShop.Application.Repositorys;
 using PharmaShop.Application.Services;
 using PharmaShop.Domain.Abtract;
 using PharmaShop.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace NUnitTest.Configuration
 {
     public class AccountServiceSetup

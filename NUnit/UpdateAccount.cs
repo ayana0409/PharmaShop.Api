@@ -3,7 +3,7 @@ using PharmaShop.Application.Models.Request.Account;
 
 namespace NUnitTest
 {
-    public class AccountServiceTest
+    public class UpdateAccount
     {
         private AccountServiceSetup _setup;
 
