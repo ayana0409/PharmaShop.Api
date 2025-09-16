@@ -10,8 +10,8 @@ namespace PharmaShop.Application.Controllers
 {
     /// <summary>
     /// Quản lý sản phẩm.
-    /// </summary>
-    [Authorize(Roles = "SuperAdmin")]
+    /// </summary>  
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProductController : ControllerBase

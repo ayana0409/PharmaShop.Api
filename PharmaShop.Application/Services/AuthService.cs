@@ -53,7 +53,8 @@ namespace PharmaShop.Application.Services
 
             return new AuthResponse
             {
-                Token = await GenerateJwtToken(loginUser)
+                Token = await GenerateJwtToken(loginUser),
+                Role = (await _userManager.GetRolesAsync(loginUser)).FirstOrDefault()
             };
         }
 

@@ -6,7 +6,7 @@ using PharmaShop.Application.Abtract;
 
 namespace PharmaShop.Application.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CategoryController : ControllerBase

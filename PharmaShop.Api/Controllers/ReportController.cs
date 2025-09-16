@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PharmaShop.Application.Abtract;
-using PharmaShop.Application.Models.Request.Report;
-using PharmaShop.Application.Models.Response;
 using PharmaShop.Application.Models.Response.Report;
-using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
 
 namespace PharmaShop.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ReportController : ControllerBase
