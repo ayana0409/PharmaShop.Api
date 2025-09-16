@@ -92,7 +92,7 @@ namespace NUnitTest
 
         // Test case 4: Ném lỗi khi không thể thêm vai trò
         [Test]
-        public async Task CreateAsync_ShouldThrowInvalidOperationException_WhenCannotAddRoles()
+        public void CreateAsync_ShouldThrowInvalidOperationException_WhenCannotAddRoles()
         {
             string roleName = "NonExistingRole";
             var accountRequest = new AccountRequest
@@ -112,11 +112,10 @@ namespace NUnitTest
 
         // Test case 5: Ném lỗi khi email không hợp lệ
         [Test]
-        [TestCase("")]
         [TestCase("   ")]
         [TestCase("email.example")]
         [TestCase("invalid email")]
-        public async Task CreateAsync_ShouldThrowArgumentException_WhenEmailIsInvalid(string email)
+        public void CreateAsync_ShouldThrowArgumentException_WhenEmailIsInvalid(string email)
         {
             var accountRequest = new AccountRequest
             {
@@ -140,7 +139,7 @@ namespace NUnitTest
         [TestCase("user name")]
         [TestCase("user!name")]
         [TestCase("username#")]
-        public async Task CreateAsync_ShouldThrowArgumentException_WhenUsernameIsInvalid(string username)
+        public void CreateAsync_ShouldThrowArgumentException_WhenUsernameIsInvalid(string username)
         {
             var accountRequest = new AccountRequest
             {

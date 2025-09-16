@@ -31,13 +31,8 @@ namespace NUnitTest.Configuration
 
             // Đăng ký DI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            // Đăng ký đối tượng user và role
-            services.AddScoped<IUserStore<ApplicationUser>, UserStore<ApplicationUser, IdentityRole, ApplicationDbContext>>();
-            services.AddScoped<IRoleStore<IdentityRole>, RoleStore<IdentityRole, ApplicationDbContext>>();
-
             services.AddScoped<UserManager<ApplicationUser>>();
             services.AddScoped<RoleManager<IdentityRole>>();
-            services.AddScoped<SignInManager<ApplicationUser>>();
             services.AddSingleton<ILoggerFactory, LoggerFactory>();
             services.AddScoped(typeof(ILogger<>), typeof(Logger<>));
             services.AddScoped<AccountService>();
