@@ -43,7 +43,7 @@ namespace PharmaShop.Application
             var connectionString = configuration.GetConnectionString("PharmaShopDatabase")
                     ?? throw new InvalidOperationException("Connection not found.");
 
-            services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(connectionString));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseMySQL(connectionString), ServiceLifetime.Scoped);
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
