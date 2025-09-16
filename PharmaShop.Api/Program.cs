@@ -25,7 +25,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000", "https://pharmashop-api.onrender.com", "http://26.139.159.129:3000", "http://localhost:3001")
+            builder.WithOrigins("http://localhost:3000", "https://pharmashop-api.onrender.com", "https://pharmashop-k2d0.onrender.com", "http://localhost:3001")
                    .AllowAnyMethod()
                    .AllowAnyHeader()
                    .AllowCredentials();
