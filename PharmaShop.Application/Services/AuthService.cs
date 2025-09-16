@@ -68,9 +68,9 @@ namespace PharmaShop.Application.Services
             var loginUser = await _userManager.FindByNameAsync(email);
             if (loginUser == null)
             {
-                int firstTypeId = _unitOfWork.Table<UserType>()
+                int firstTypeId = (await _unitOfWork.Table<UserType>()
                                                 .OrderBy(t => t.Point)
-                                                .FirstOrDefaultAsync().Id;
+                                                .FirstOrDefaultAsync())!.Id;
                 var newUser = new ApplicationUser
                 {
                     UserName = email,
